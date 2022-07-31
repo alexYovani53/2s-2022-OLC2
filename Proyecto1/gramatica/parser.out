@@ -1,0 +1,222 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    CORDER
+    CORIZQ
+    DIVISION
+    ID
+    INT
+    MULTIPLICACION
+    PTCOMA
+
+Grammar
+
+Rule 0     S' -> init
+Rule 1     init -> instrucciones
+Rule 2     instrucciones -> instrucciones instruccion
+Rule 3     instrucciones -> instruccion
+Rule 4     instruccion -> print_inst
+Rule 5     print_inst -> PRINT PIZQ expression PDER
+Rule 6     expression -> expression MAS expression
+Rule 7     expression -> expression MENOS expression
+Rule 8     expression -> ENTERO
+Rule 9     expression -> DECIMAL
+
+Terminals, with rules where they appear
+
+CORDER               : 
+CORIZQ               : 
+DECIMAL              : 9
+DIVISION             : 
+ENTERO               : 8
+ID                   : 
+INT                  : 
+MAS                  : 6
+MENOS                : 7
+MULTIPLICACION       : 
+PDER                 : 5
+PIZQ                 : 5
+PRINT                : 5
+PTCOMA               : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 5 6 6 7 7
+init                 : 0
+instruccion          : 2 3
+instrucciones        : 1 2
+print_inst           : 4
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . init
+    (1) init -> . instrucciones
+    (2) instrucciones -> . instrucciones instruccion
+    (3) instrucciones -> . instruccion
+    (4) instruccion -> . print_inst
+    (5) print_inst -> . PRINT PIZQ expression PDER
+
+    PRINT           shift and go to state 5
+
+    init                           shift and go to state 1
+    instrucciones                  shift and go to state 2
+    instruccion                    shift and go to state 3
+    print_inst                     shift and go to state 4
+
+state 1
+
+    (0) S' -> init .
+
+
+
+state 2
+
+    (1) init -> instrucciones .
+    (2) instrucciones -> instrucciones . instruccion
+    (4) instruccion -> . print_inst
+    (5) print_inst -> . PRINT PIZQ expression PDER
+
+    $end            reduce using rule 1 (init -> instrucciones .)
+    PRINT           shift and go to state 5
+
+    instruccion                    shift and go to state 6
+    print_inst                     shift and go to state 4
+
+state 3
+
+    (3) instrucciones -> instruccion .
+
+    PRINT           reduce using rule 3 (instrucciones -> instruccion .)
+    $end            reduce using rule 3 (instrucciones -> instruccion .)
+
+
+state 4
+
+    (4) instruccion -> print_inst .
+
+    PRINT           reduce using rule 4 (instruccion -> print_inst .)
+    $end            reduce using rule 4 (instruccion -> print_inst .)
+
+
+state 5
+
+    (5) print_inst -> PRINT . PIZQ expression PDER
+
+    PIZQ            shift and go to state 7
+
+
+state 6
+
+    (2) instrucciones -> instrucciones instruccion .
+
+    PRINT           reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    $end            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+
+
+state 7
+
+    (5) print_inst -> PRINT PIZQ . expression PDER
+    (6) expression -> . expression MAS expression
+    (7) expression -> . expression MENOS expression
+    (8) expression -> . ENTERO
+    (9) expression -> . DECIMAL
+
+    ENTERO          shift and go to state 9
+    DECIMAL         shift and go to state 10
+
+    expression                     shift and go to state 8
+
+state 8
+
+    (5) print_inst -> PRINT PIZQ expression . PDER
+    (6) expression -> expression . MAS expression
+    (7) expression -> expression . MENOS expression
+
+    PDER            shift and go to state 11
+    MAS             shift and go to state 12
+    MENOS           shift and go to state 13
+
+
+state 9
+
+    (8) expression -> ENTERO .
+
+    PDER            reduce using rule 8 (expression -> ENTERO .)
+    MAS             reduce using rule 8 (expression -> ENTERO .)
+    MENOS           reduce using rule 8 (expression -> ENTERO .)
+
+
+state 10
+
+    (9) expression -> DECIMAL .
+
+    PDER            reduce using rule 9 (expression -> DECIMAL .)
+    MAS             reduce using rule 9 (expression -> DECIMAL .)
+    MENOS           reduce using rule 9 (expression -> DECIMAL .)
+
+
+state 11
+
+    (5) print_inst -> PRINT PIZQ expression PDER .
+
+    PRINT           reduce using rule 5 (print_inst -> PRINT PIZQ expression PDER .)
+    $end            reduce using rule 5 (print_inst -> PRINT PIZQ expression PDER .)
+
+
+state 12
+
+    (6) expression -> expression MAS . expression
+    (6) expression -> . expression MAS expression
+    (7) expression -> . expression MENOS expression
+    (8) expression -> . ENTERO
+    (9) expression -> . DECIMAL
+
+    ENTERO          shift and go to state 9
+    DECIMAL         shift and go to state 10
+
+    expression                     shift and go to state 14
+
+state 13
+
+    (7) expression -> expression MENOS . expression
+    (6) expression -> . expression MAS expression
+    (7) expression -> . expression MENOS expression
+    (8) expression -> . ENTERO
+    (9) expression -> . DECIMAL
+
+    ENTERO          shift and go to state 9
+    DECIMAL         shift and go to state 10
+
+    expression                     shift and go to state 15
+
+state 14
+
+    (6) expression -> expression MAS expression .
+    (6) expression -> expression . MAS expression
+    (7) expression -> expression . MENOS expression
+
+    PDER            reduce using rule 6 (expression -> expression MAS expression .)
+    MAS             reduce using rule 6 (expression -> expression MAS expression .)
+    MENOS           reduce using rule 6 (expression -> expression MAS expression .)
+
+  ! MAS             [ shift and go to state 12 ]
+  ! MENOS           [ shift and go to state 13 ]
+
+
+state 15
+
+    (7) expression -> expression MENOS expression .
+    (6) expression -> expression . MAS expression
+    (7) expression -> expression . MENOS expression
+
+    PDER            reduce using rule 7 (expression -> expression MENOS expression .)
+    MAS             reduce using rule 7 (expression -> expression MENOS expression .)
+    MENOS           reduce using rule 7 (expression -> expression MENOS expression .)
+
+  ! MAS             [ shift and go to state 12 ]
+  ! MENOS           [ shift and go to state 13 ]
+
