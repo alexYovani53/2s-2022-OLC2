@@ -4,11 +4,7 @@ Unused terminals:
 
     CORDER
     CORIZQ
-    DIVISION
-    ID
-    INT
-    MULTIPLICACION
-    PTCOMA
+    DOBLEPT
 
 Grammar
 
@@ -17,33 +13,68 @@ Rule 1     init -> instrucciones
 Rule 2     instrucciones -> instrucciones instruccion
 Rule 3     instrucciones -> instruccion
 Rule 4     instruccion -> print_inst
-Rule 5     print_inst -> PRINT PIZQ expression PDER
-Rule 6     expression -> expression MAS expression
-Rule 7     expression -> expression MENOS expression
-Rule 8     expression -> ENTERO
-Rule 9     expression -> DECIMAL
+Rule 5     instruccion -> declaracion
+Rule 6     declaracion -> INT ID IGUAL expresion PTCOMA
+Rule 7     declaracion -> INT ID PTCOMA
+Rule 8     print_inst -> PRINT PIZQ expresion PDER PTCOMA
+Rule 9     expresion -> expresion OR expresion
+Rule 10    expresion -> expresion AND expresion
+Rule 11    expresion -> NOT expresion
+Rule 12    expresion -> expresion MENOR expresion
+Rule 13    expresion -> expresion MAYOR expresion
+Rule 14    expresion -> expresion MAYORIGUAL expresion
+Rule 15    expresion -> expresion MENORIGUAL expresion
+Rule 16    expresion -> expresion DIFERENTE expresion
+Rule 17    expresion -> expresion IGUALIGUAL expresion
+Rule 18    expresion -> MENOS expresion
+Rule 19    expresion -> expresion MAS expresion
+Rule 20    expresion -> expresion MENOS expresion
+Rule 21    expresion -> expresion MULTIPLICACION expresion
+Rule 22    expresion -> expresion DIVISION expresion
+Rule 23    expresion -> PIZQ expresion PDER
+Rule 24    expresion -> ENTERO
+Rule 25    expresion -> DECIMAL
+Rule 26    expresion -> ID
+Rule 27    expresion -> CADENA
+Rule 28    expresion -> TRUE
+Rule 29    expresion -> FALSE
 
 Terminals, with rules where they appear
 
+AND                  : 10
+CADENA               : 27
 CORDER               : 
 CORIZQ               : 
-DECIMAL              : 9
-DIVISION             : 
-ENTERO               : 8
-ID                   : 
-INT                  : 
-MAS                  : 6
-MENOS                : 7
-MULTIPLICACION       : 
-PDER                 : 5
-PIZQ                 : 5
-PRINT                : 5
-PTCOMA               : 
+DECIMAL              : 25
+DIFERENTE            : 16
+DIVISION             : 22
+DOBLEPT              : 
+ENTERO               : 24
+FALSE                : 29
+ID                   : 6 7 26
+IGUAL                : 6
+IGUALIGUAL           : 17
+INT                  : 6 7
+MAS                  : 19
+MAYOR                : 13
+MAYORIGUAL           : 14
+MENOR                : 12
+MENORIGUAL           : 15
+MENOS                : 18 20
+MULTIPLICACION       : 21
+NOT                  : 11
+OR                   : 9
+PDER                 : 8 23
+PIZQ                 : 8 23
+PRINT                : 8
+PTCOMA               : 6 7 8
+TRUE                 : 28
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 5 6 6 7 7
+declaracion          : 5
+expresion            : 6 8 9 9 10 10 11 12 12 13 13 14 14 15 15 16 16 17 17 18 19 19 20 20 21 21 22 22 23
 init                 : 0
 instruccion          : 2 3
 instrucciones        : 1 2
@@ -58,14 +89,19 @@ state 0
     (2) instrucciones -> . instrucciones instruccion
     (3) instrucciones -> . instruccion
     (4) instruccion -> . print_inst
-    (5) print_inst -> . PRINT PIZQ expression PDER
+    (5) instruccion -> . declaracion
+    (8) print_inst -> . PRINT PIZQ expresion PDER PTCOMA
+    (6) declaracion -> . INT ID IGUAL expresion PTCOMA
+    (7) declaracion -> . INT ID PTCOMA
 
-    PRINT           shift and go to state 5
+    PRINT           shift and go to state 6
+    INT             shift and go to state 7
 
     init                           shift and go to state 1
     instrucciones                  shift and go to state 2
     instruccion                    shift and go to state 3
     print_inst                     shift and go to state 4
+    declaracion                    shift and go to state 5
 
 state 1
 
@@ -78,19 +114,25 @@ state 2
     (1) init -> instrucciones .
     (2) instrucciones -> instrucciones . instruccion
     (4) instruccion -> . print_inst
-    (5) print_inst -> . PRINT PIZQ expression PDER
+    (5) instruccion -> . declaracion
+    (8) print_inst -> . PRINT PIZQ expresion PDER PTCOMA
+    (6) declaracion -> . INT ID IGUAL expresion PTCOMA
+    (7) declaracion -> . INT ID PTCOMA
 
     $end            reduce using rule 1 (init -> instrucciones .)
-    PRINT           shift and go to state 5
+    PRINT           shift and go to state 6
+    INT             shift and go to state 7
 
-    instruccion                    shift and go to state 6
+    instruccion                    shift and go to state 8
     print_inst                     shift and go to state 4
+    declaracion                    shift and go to state 5
 
 state 3
 
     (3) instrucciones -> instruccion .
 
     PRINT           reduce using rule 3 (instrucciones -> instruccion .)
+    INT             reduce using rule 3 (instrucciones -> instruccion .)
     $end            reduce using rule 3 (instrucciones -> instruccion .)
 
 
@@ -99,124 +141,1574 @@ state 4
     (4) instruccion -> print_inst .
 
     PRINT           reduce using rule 4 (instruccion -> print_inst .)
+    INT             reduce using rule 4 (instruccion -> print_inst .)
     $end            reduce using rule 4 (instruccion -> print_inst .)
 
 
 state 5
 
-    (5) print_inst -> PRINT . PIZQ expression PDER
+    (5) instruccion -> declaracion .
 
-    PIZQ            shift and go to state 7
+    PRINT           reduce using rule 5 (instruccion -> declaracion .)
+    INT             reduce using rule 5 (instruccion -> declaracion .)
+    $end            reduce using rule 5 (instruccion -> declaracion .)
 
 
 state 6
 
-    (2) instrucciones -> instrucciones instruccion .
+    (8) print_inst -> PRINT . PIZQ expresion PDER PTCOMA
 
-    PRINT           reduce using rule 2 (instrucciones -> instrucciones instruccion .)
-    $end            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    PIZQ            shift and go to state 9
 
 
 state 7
 
-    (5) print_inst -> PRINT PIZQ . expression PDER
-    (6) expression -> . expression MAS expression
-    (7) expression -> . expression MENOS expression
-    (8) expression -> . ENTERO
-    (9) expression -> . DECIMAL
+    (6) declaracion -> INT . ID IGUAL expresion PTCOMA
+    (7) declaracion -> INT . ID PTCOMA
 
-    ENTERO          shift and go to state 9
-    DECIMAL         shift and go to state 10
+    ID              shift and go to state 10
 
-    expression                     shift and go to state 8
 
 state 8
 
-    (5) print_inst -> PRINT PIZQ expression . PDER
-    (6) expression -> expression . MAS expression
-    (7) expression -> expression . MENOS expression
+    (2) instrucciones -> instrucciones instruccion .
 
-    PDER            shift and go to state 11
-    MAS             shift and go to state 12
-    MENOS           shift and go to state 13
+    PRINT           reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    INT             reduce using rule 2 (instrucciones -> instrucciones instruccion .)
+    $end            reduce using rule 2 (instrucciones -> instrucciones instruccion .)
 
 
 state 9
 
-    (8) expression -> ENTERO .
+    (8) print_inst -> PRINT PIZQ . expresion PDER PTCOMA
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
 
-    PDER            reduce using rule 8 (expression -> ENTERO .)
-    MAS             reduce using rule 8 (expression -> ENTERO .)
-    MENOS           reduce using rule 8 (expression -> ENTERO .)
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
 
+    expresion                      shift and go to state 12
 
 state 10
 
-    (9) expression -> DECIMAL .
+    (6) declaracion -> INT ID . IGUAL expresion PTCOMA
+    (7) declaracion -> INT ID . PTCOMA
 
-    PDER            reduce using rule 9 (expression -> DECIMAL .)
-    MAS             reduce using rule 9 (expression -> DECIMAL .)
-    MENOS           reduce using rule 9 (expression -> DECIMAL .)
+    IGUAL           shift and go to state 21
+    PTCOMA          shift and go to state 22
 
 
 state 11
 
-    (5) print_inst -> PRINT PIZQ expression PDER .
+    (23) expresion -> PIZQ . expresion PDER
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
 
-    PRINT           reduce using rule 5 (print_inst -> PRINT PIZQ expression PDER .)
-    $end            reduce using rule 5 (print_inst -> PRINT PIZQ expression PDER .)
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
 
+    expresion                      shift and go to state 23
 
 state 12
 
-    (6) expression -> expression MAS . expression
-    (6) expression -> . expression MAS expression
-    (7) expression -> . expression MENOS expression
-    (8) expression -> . ENTERO
-    (9) expression -> . DECIMAL
+    (8) print_inst -> PRINT PIZQ expresion . PDER PTCOMA
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
 
-    ENTERO          shift and go to state 9
-    DECIMAL         shift and go to state 10
+    PDER            shift and go to state 24
+    OR              shift and go to state 25
+    AND             shift and go to state 26
+    MENOR           shift and go to state 27
+    MAYOR           shift and go to state 28
+    MAYORIGUAL      shift and go to state 29
+    MENORIGUAL      shift and go to state 30
+    DIFERENTE       shift and go to state 31
+    IGUALIGUAL      shift and go to state 32
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
 
-    expression                     shift and go to state 14
 
 state 13
 
-    (7) expression -> expression MENOS . expression
-    (6) expression -> . expression MAS expression
-    (7) expression -> . expression MENOS expression
-    (8) expression -> . ENTERO
-    (9) expression -> . DECIMAL
+    (11) expresion -> NOT . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
 
-    ENTERO          shift and go to state 9
-    DECIMAL         shift and go to state 10
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
 
-    expression                     shift and go to state 15
+    expresion                      shift and go to state 37
 
 state 14
 
-    (6) expression -> expression MAS expression .
-    (6) expression -> expression . MAS expression
-    (7) expression -> expression . MENOS expression
+    (18) expresion -> MENOS . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
 
-    PDER            reduce using rule 6 (expression -> expression MAS expression .)
-    MAS             reduce using rule 6 (expression -> expression MAS expression .)
-    MENOS           reduce using rule 6 (expression -> expression MAS expression .)
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
 
-  ! MAS             [ shift and go to state 12 ]
-  ! MENOS           [ shift and go to state 13 ]
-
+    expresion                      shift and go to state 38
 
 state 15
 
-    (7) expression -> expression MENOS expression .
-    (6) expression -> expression . MAS expression
-    (7) expression -> expression . MENOS expression
+    (24) expresion -> ENTERO .
 
-    PDER            reduce using rule 7 (expression -> expression MENOS expression .)
-    MAS             reduce using rule 7 (expression -> expression MENOS expression .)
-    MENOS           reduce using rule 7 (expression -> expression MENOS expression .)
+    PDER            reduce using rule 24 (expresion -> ENTERO .)
+    OR              reduce using rule 24 (expresion -> ENTERO .)
+    AND             reduce using rule 24 (expresion -> ENTERO .)
+    MENOR           reduce using rule 24 (expresion -> ENTERO .)
+    MAYOR           reduce using rule 24 (expresion -> ENTERO .)
+    MAYORIGUAL      reduce using rule 24 (expresion -> ENTERO .)
+    MENORIGUAL      reduce using rule 24 (expresion -> ENTERO .)
+    DIFERENTE       reduce using rule 24 (expresion -> ENTERO .)
+    IGUALIGUAL      reduce using rule 24 (expresion -> ENTERO .)
+    MAS             reduce using rule 24 (expresion -> ENTERO .)
+    MENOS           reduce using rule 24 (expresion -> ENTERO .)
+    MULTIPLICACION  reduce using rule 24 (expresion -> ENTERO .)
+    DIVISION        reduce using rule 24 (expresion -> ENTERO .)
+    PTCOMA          reduce using rule 24 (expresion -> ENTERO .)
 
-  ! MAS             [ shift and go to state 12 ]
-  ! MENOS           [ shift and go to state 13 ]
+
+state 16
+
+    (25) expresion -> DECIMAL .
+
+    PDER            reduce using rule 25 (expresion -> DECIMAL .)
+    OR              reduce using rule 25 (expresion -> DECIMAL .)
+    AND             reduce using rule 25 (expresion -> DECIMAL .)
+    MENOR           reduce using rule 25 (expresion -> DECIMAL .)
+    MAYOR           reduce using rule 25 (expresion -> DECIMAL .)
+    MAYORIGUAL      reduce using rule 25 (expresion -> DECIMAL .)
+    MENORIGUAL      reduce using rule 25 (expresion -> DECIMAL .)
+    DIFERENTE       reduce using rule 25 (expresion -> DECIMAL .)
+    IGUALIGUAL      reduce using rule 25 (expresion -> DECIMAL .)
+    MAS             reduce using rule 25 (expresion -> DECIMAL .)
+    MENOS           reduce using rule 25 (expresion -> DECIMAL .)
+    MULTIPLICACION  reduce using rule 25 (expresion -> DECIMAL .)
+    DIVISION        reduce using rule 25 (expresion -> DECIMAL .)
+    PTCOMA          reduce using rule 25 (expresion -> DECIMAL .)
+
+
+state 17
+
+    (26) expresion -> ID .
+
+    PDER            reduce using rule 26 (expresion -> ID .)
+    OR              reduce using rule 26 (expresion -> ID .)
+    AND             reduce using rule 26 (expresion -> ID .)
+    MENOR           reduce using rule 26 (expresion -> ID .)
+    MAYOR           reduce using rule 26 (expresion -> ID .)
+    MAYORIGUAL      reduce using rule 26 (expresion -> ID .)
+    MENORIGUAL      reduce using rule 26 (expresion -> ID .)
+    DIFERENTE       reduce using rule 26 (expresion -> ID .)
+    IGUALIGUAL      reduce using rule 26 (expresion -> ID .)
+    MAS             reduce using rule 26 (expresion -> ID .)
+    MENOS           reduce using rule 26 (expresion -> ID .)
+    MULTIPLICACION  reduce using rule 26 (expresion -> ID .)
+    DIVISION        reduce using rule 26 (expresion -> ID .)
+    PTCOMA          reduce using rule 26 (expresion -> ID .)
+
+
+state 18
+
+    (27) expresion -> CADENA .
+
+    PDER            reduce using rule 27 (expresion -> CADENA .)
+    OR              reduce using rule 27 (expresion -> CADENA .)
+    AND             reduce using rule 27 (expresion -> CADENA .)
+    MENOR           reduce using rule 27 (expresion -> CADENA .)
+    MAYOR           reduce using rule 27 (expresion -> CADENA .)
+    MAYORIGUAL      reduce using rule 27 (expresion -> CADENA .)
+    MENORIGUAL      reduce using rule 27 (expresion -> CADENA .)
+    DIFERENTE       reduce using rule 27 (expresion -> CADENA .)
+    IGUALIGUAL      reduce using rule 27 (expresion -> CADENA .)
+    MAS             reduce using rule 27 (expresion -> CADENA .)
+    MENOS           reduce using rule 27 (expresion -> CADENA .)
+    MULTIPLICACION  reduce using rule 27 (expresion -> CADENA .)
+    DIVISION        reduce using rule 27 (expresion -> CADENA .)
+    PTCOMA          reduce using rule 27 (expresion -> CADENA .)
+
+
+state 19
+
+    (28) expresion -> TRUE .
+
+    PDER            reduce using rule 28 (expresion -> TRUE .)
+    OR              reduce using rule 28 (expresion -> TRUE .)
+    AND             reduce using rule 28 (expresion -> TRUE .)
+    MENOR           reduce using rule 28 (expresion -> TRUE .)
+    MAYOR           reduce using rule 28 (expresion -> TRUE .)
+    MAYORIGUAL      reduce using rule 28 (expresion -> TRUE .)
+    MENORIGUAL      reduce using rule 28 (expresion -> TRUE .)
+    DIFERENTE       reduce using rule 28 (expresion -> TRUE .)
+    IGUALIGUAL      reduce using rule 28 (expresion -> TRUE .)
+    MAS             reduce using rule 28 (expresion -> TRUE .)
+    MENOS           reduce using rule 28 (expresion -> TRUE .)
+    MULTIPLICACION  reduce using rule 28 (expresion -> TRUE .)
+    DIVISION        reduce using rule 28 (expresion -> TRUE .)
+    PTCOMA          reduce using rule 28 (expresion -> TRUE .)
+
+
+state 20
+
+    (29) expresion -> FALSE .
+
+    PDER            reduce using rule 29 (expresion -> FALSE .)
+    OR              reduce using rule 29 (expresion -> FALSE .)
+    AND             reduce using rule 29 (expresion -> FALSE .)
+    MENOR           reduce using rule 29 (expresion -> FALSE .)
+    MAYOR           reduce using rule 29 (expresion -> FALSE .)
+    MAYORIGUAL      reduce using rule 29 (expresion -> FALSE .)
+    MENORIGUAL      reduce using rule 29 (expresion -> FALSE .)
+    DIFERENTE       reduce using rule 29 (expresion -> FALSE .)
+    IGUALIGUAL      reduce using rule 29 (expresion -> FALSE .)
+    MAS             reduce using rule 29 (expresion -> FALSE .)
+    MENOS           reduce using rule 29 (expresion -> FALSE .)
+    MULTIPLICACION  reduce using rule 29 (expresion -> FALSE .)
+    DIVISION        reduce using rule 29 (expresion -> FALSE .)
+    PTCOMA          reduce using rule 29 (expresion -> FALSE .)
+
+
+state 21
+
+    (6) declaracion -> INT ID IGUAL . expresion PTCOMA
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 39
+
+state 22
+
+    (7) declaracion -> INT ID PTCOMA .
+
+    PRINT           reduce using rule 7 (declaracion -> INT ID PTCOMA .)
+    INT             reduce using rule 7 (declaracion -> INT ID PTCOMA .)
+    $end            reduce using rule 7 (declaracion -> INT ID PTCOMA .)
+
+
+state 23
+
+    (23) expresion -> PIZQ expresion . PDER
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            shift and go to state 40
+    OR              shift and go to state 25
+    AND             shift and go to state 26
+    MENOR           shift and go to state 27
+    MAYOR           shift and go to state 28
+    MAYORIGUAL      shift and go to state 29
+    MENORIGUAL      shift and go to state 30
+    DIFERENTE       shift and go to state 31
+    IGUALIGUAL      shift and go to state 32
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+
+state 24
+
+    (8) print_inst -> PRINT PIZQ expresion PDER . PTCOMA
+
+    PTCOMA          shift and go to state 41
+
+
+state 25
+
+    (9) expresion -> expresion OR . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 42
+
+state 26
+
+    (10) expresion -> expresion AND . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 43
+
+state 27
+
+    (12) expresion -> expresion MENOR . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 44
+
+state 28
+
+    (13) expresion -> expresion MAYOR . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 45
+
+state 29
+
+    (14) expresion -> expresion MAYORIGUAL . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 46
+
+state 30
+
+    (15) expresion -> expresion MENORIGUAL . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 47
+
+state 31
+
+    (16) expresion -> expresion DIFERENTE . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 48
+
+state 32
+
+    (17) expresion -> expresion IGUALIGUAL . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 49
+
+state 33
+
+    (19) expresion -> expresion MAS . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 50
+
+state 34
+
+    (20) expresion -> expresion MENOS . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 51
+
+state 35
+
+    (21) expresion -> expresion MULTIPLICACION . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 52
+
+state 36
+
+    (22) expresion -> expresion DIVISION . expresion
+    (9) expresion -> . expresion OR expresion
+    (10) expresion -> . expresion AND expresion
+    (11) expresion -> . NOT expresion
+    (12) expresion -> . expresion MENOR expresion
+    (13) expresion -> . expresion MAYOR expresion
+    (14) expresion -> . expresion MAYORIGUAL expresion
+    (15) expresion -> . expresion MENORIGUAL expresion
+    (16) expresion -> . expresion DIFERENTE expresion
+    (17) expresion -> . expresion IGUALIGUAL expresion
+    (18) expresion -> . MENOS expresion
+    (19) expresion -> . expresion MAS expresion
+    (20) expresion -> . expresion MENOS expresion
+    (21) expresion -> . expresion MULTIPLICACION expresion
+    (22) expresion -> . expresion DIVISION expresion
+    (23) expresion -> . PIZQ expresion PDER
+    (24) expresion -> . ENTERO
+    (25) expresion -> . DECIMAL
+    (26) expresion -> . ID
+    (27) expresion -> . CADENA
+    (28) expresion -> . TRUE
+    (29) expresion -> . FALSE
+
+    NOT             shift and go to state 13
+    MENOS           shift and go to state 14
+    PIZQ            shift and go to state 11
+    ENTERO          shift and go to state 15
+    DECIMAL         shift and go to state 16
+    ID              shift and go to state 17
+    CADENA          shift and go to state 18
+    TRUE            shift and go to state 19
+    FALSE           shift and go to state 20
+
+    expresion                      shift and go to state 53
+
+state 37
+
+    (11) expresion -> NOT expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 11 (expresion -> NOT expresion .)
+    OR              reduce using rule 11 (expresion -> NOT expresion .)
+    AND             reduce using rule 11 (expresion -> NOT expresion .)
+    MENOR           reduce using rule 11 (expresion -> NOT expresion .)
+    MAYOR           reduce using rule 11 (expresion -> NOT expresion .)
+    MAYORIGUAL      reduce using rule 11 (expresion -> NOT expresion .)
+    MENORIGUAL      reduce using rule 11 (expresion -> NOT expresion .)
+    DIFERENTE       reduce using rule 11 (expresion -> NOT expresion .)
+    IGUALIGUAL      reduce using rule 11 (expresion -> NOT expresion .)
+    MAS             reduce using rule 11 (expresion -> NOT expresion .)
+    MENOS           reduce using rule 11 (expresion -> NOT expresion .)
+    MULTIPLICACION  reduce using rule 11 (expresion -> NOT expresion .)
+    DIVISION        reduce using rule 11 (expresion -> NOT expresion .)
+    PTCOMA          reduce using rule 11 (expresion -> NOT expresion .)
+
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+  ! MAS             [ shift and go to state 33 ]
+  ! MENOS           [ shift and go to state 34 ]
+  ! MULTIPLICACION  [ shift and go to state 35 ]
+  ! DIVISION        [ shift and go to state 36 ]
+
+
+state 38
+
+    (18) expresion -> MENOS expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 18 (expresion -> MENOS expresion .)
+    OR              reduce using rule 18 (expresion -> MENOS expresion .)
+    AND             reduce using rule 18 (expresion -> MENOS expresion .)
+    MENOR           reduce using rule 18 (expresion -> MENOS expresion .)
+    MAYOR           reduce using rule 18 (expresion -> MENOS expresion .)
+    MAYORIGUAL      reduce using rule 18 (expresion -> MENOS expresion .)
+    MENORIGUAL      reduce using rule 18 (expresion -> MENOS expresion .)
+    DIFERENTE       reduce using rule 18 (expresion -> MENOS expresion .)
+    IGUALIGUAL      reduce using rule 18 (expresion -> MENOS expresion .)
+    MAS             reduce using rule 18 (expresion -> MENOS expresion .)
+    MENOS           reduce using rule 18 (expresion -> MENOS expresion .)
+    MULTIPLICACION  reduce using rule 18 (expresion -> MENOS expresion .)
+    DIVISION        reduce using rule 18 (expresion -> MENOS expresion .)
+    PTCOMA          reduce using rule 18 (expresion -> MENOS expresion .)
+
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+  ! MAS             [ shift and go to state 33 ]
+  ! MENOS           [ shift and go to state 34 ]
+  ! MULTIPLICACION  [ shift and go to state 35 ]
+  ! DIVISION        [ shift and go to state 36 ]
+
+
+state 39
+
+    (6) declaracion -> INT ID IGUAL expresion . PTCOMA
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PTCOMA          shift and go to state 54
+    OR              shift and go to state 25
+    AND             shift and go to state 26
+    MENOR           shift and go to state 27
+    MAYOR           shift and go to state 28
+    MAYORIGUAL      shift and go to state 29
+    MENORIGUAL      shift and go to state 30
+    DIFERENTE       shift and go to state 31
+    IGUALIGUAL      shift and go to state 32
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+
+state 40
+
+    (23) expresion -> PIZQ expresion PDER .
+
+    PDER            reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    OR              reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    AND             reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    MENOR           reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    MAYOR           reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    MAYORIGUAL      reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    MENORIGUAL      reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    DIFERENTE       reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    IGUALIGUAL      reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    MAS             reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    MENOS           reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    MULTIPLICACION  reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    DIVISION        reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+    PTCOMA          reduce using rule 23 (expresion -> PIZQ expresion PDER .)
+
+
+state 41
+
+    (8) print_inst -> PRINT PIZQ expresion PDER PTCOMA .
+
+    PRINT           reduce using rule 8 (print_inst -> PRINT PIZQ expresion PDER PTCOMA .)
+    INT             reduce using rule 8 (print_inst -> PRINT PIZQ expresion PDER PTCOMA .)
+    $end            reduce using rule 8 (print_inst -> PRINT PIZQ expresion PDER PTCOMA .)
+
+
+state 42
+
+    (9) expresion -> expresion OR expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 9 (expresion -> expresion OR expresion .)
+    OR              reduce using rule 9 (expresion -> expresion OR expresion .)
+    PTCOMA          reduce using rule 9 (expresion -> expresion OR expresion .)
+    AND             shift and go to state 26
+    MENOR           shift and go to state 27
+    MAYOR           shift and go to state 28
+    MAYORIGUAL      shift and go to state 29
+    MENORIGUAL      shift and go to state 30
+    DIFERENTE       shift and go to state 31
+    IGUALIGUAL      shift and go to state 32
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! AND             [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! MENOR           [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! MAYOR           [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! MAYORIGUAL      [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! MENORIGUAL      [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! DIFERENTE       [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! IGUALIGUAL      [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! MAS             [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! MENOS           [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! DIVISION        [ reduce using rule 9 (expresion -> expresion OR expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+
+
+state 43
+
+    (10) expresion -> expresion AND expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 10 (expresion -> expresion AND expresion .)
+    OR              reduce using rule 10 (expresion -> expresion AND expresion .)
+    AND             reduce using rule 10 (expresion -> expresion AND expresion .)
+    PTCOMA          reduce using rule 10 (expresion -> expresion AND expresion .)
+    MENOR           shift and go to state 27
+    MAYOR           shift and go to state 28
+    MAYORIGUAL      shift and go to state 29
+    MENORIGUAL      shift and go to state 30
+    DIFERENTE       shift and go to state 31
+    IGUALIGUAL      shift and go to state 32
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MENOR           [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! MAYOR           [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! MAYORIGUAL      [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! MENORIGUAL      [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! DIFERENTE       [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! IGUALIGUAL      [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! MAS             [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! MENOS           [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! DIVISION        [ reduce using rule 10 (expresion -> expresion AND expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+
+
+state 44
+
+    (12) expresion -> expresion MENOR expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    OR              reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    AND             reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    MENOR           reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    MAYOR           reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    MAYORIGUAL      reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    MENORIGUAL      reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    DIFERENTE       reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    IGUALIGUAL      reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    PTCOMA          reduce using rule 12 (expresion -> expresion MENOR expresion .)
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MAS             [ reduce using rule 12 (expresion -> expresion MENOR expresion .) ]
+  ! MENOS           [ reduce using rule 12 (expresion -> expresion MENOR expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 12 (expresion -> expresion MENOR expresion .) ]
+  ! DIVISION        [ reduce using rule 12 (expresion -> expresion MENOR expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+
+
+state 45
+
+    (13) expresion -> expresion MAYOR expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    OR              reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    AND             reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    MENOR           reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    MAYOR           reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    MAYORIGUAL      reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    MENORIGUAL      reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    DIFERENTE       reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    IGUALIGUAL      reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    PTCOMA          reduce using rule 13 (expresion -> expresion MAYOR expresion .)
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MAS             [ reduce using rule 13 (expresion -> expresion MAYOR expresion .) ]
+  ! MENOS           [ reduce using rule 13 (expresion -> expresion MAYOR expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 13 (expresion -> expresion MAYOR expresion .) ]
+  ! DIVISION        [ reduce using rule 13 (expresion -> expresion MAYOR expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+
+
+state 46
+
+    (14) expresion -> expresion MAYORIGUAL expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    OR              reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    AND             reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    MENOR           reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    MAYOR           reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    MAYORIGUAL      reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    MENORIGUAL      reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    DIFERENTE       reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    IGUALIGUAL      reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    PTCOMA          reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .)
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MAS             [ reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .) ]
+  ! MENOS           [ reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .) ]
+  ! DIVISION        [ reduce using rule 14 (expresion -> expresion MAYORIGUAL expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+
+
+state 47
+
+    (15) expresion -> expresion MENORIGUAL expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    OR              reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    AND             reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    MENOR           reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    MAYOR           reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    MAYORIGUAL      reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    MENORIGUAL      reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    DIFERENTE       reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    IGUALIGUAL      reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    PTCOMA          reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .)
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MAS             [ reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .) ]
+  ! MENOS           [ reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .) ]
+  ! DIVISION        [ reduce using rule 15 (expresion -> expresion MENORIGUAL expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+
+
+state 48
+
+    (16) expresion -> expresion DIFERENTE expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    OR              reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    AND             reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    MENOR           reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    MAYOR           reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    MAYORIGUAL      reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    MENORIGUAL      reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    DIFERENTE       reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    IGUALIGUAL      reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    PTCOMA          reduce using rule 16 (expresion -> expresion DIFERENTE expresion .)
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MAS             [ reduce using rule 16 (expresion -> expresion DIFERENTE expresion .) ]
+  ! MENOS           [ reduce using rule 16 (expresion -> expresion DIFERENTE expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 16 (expresion -> expresion DIFERENTE expresion .) ]
+  ! DIVISION        [ reduce using rule 16 (expresion -> expresion DIFERENTE expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+
+
+state 49
+
+    (17) expresion -> expresion IGUALIGUAL expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    OR              reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    AND             reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    MENOR           reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    MAYOR           reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    MAYORIGUAL      reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    MENORIGUAL      reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    DIFERENTE       reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    IGUALIGUAL      reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    PTCOMA          reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .)
+    MAS             shift and go to state 33
+    MENOS           shift and go to state 34
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MAS             [ reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .) ]
+  ! MENOS           [ reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .) ]
+  ! MULTIPLICACION  [ reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .) ]
+  ! DIVISION        [ reduce using rule 17 (expresion -> expresion IGUALIGUAL expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+
+
+state 50
+
+    (19) expresion -> expresion MAS expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 19 (expresion -> expresion MAS expresion .)
+    OR              reduce using rule 19 (expresion -> expresion MAS expresion .)
+    AND             reduce using rule 19 (expresion -> expresion MAS expresion .)
+    MENOR           reduce using rule 19 (expresion -> expresion MAS expresion .)
+    MAYOR           reduce using rule 19 (expresion -> expresion MAS expresion .)
+    MAYORIGUAL      reduce using rule 19 (expresion -> expresion MAS expresion .)
+    MENORIGUAL      reduce using rule 19 (expresion -> expresion MAS expresion .)
+    DIFERENTE       reduce using rule 19 (expresion -> expresion MAS expresion .)
+    IGUALIGUAL      reduce using rule 19 (expresion -> expresion MAS expresion .)
+    MAS             reduce using rule 19 (expresion -> expresion MAS expresion .)
+    MENOS           reduce using rule 19 (expresion -> expresion MAS expresion .)
+    PTCOMA          reduce using rule 19 (expresion -> expresion MAS expresion .)
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MULTIPLICACION  [ reduce using rule 19 (expresion -> expresion MAS expresion .) ]
+  ! DIVISION        [ reduce using rule 19 (expresion -> expresion MAS expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+  ! MAS             [ shift and go to state 33 ]
+  ! MENOS           [ shift and go to state 34 ]
+
+
+state 51
+
+    (20) expresion -> expresion MENOS expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    OR              reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    AND             reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    MENOR           reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    MAYOR           reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    MAYORIGUAL      reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    MENORIGUAL      reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    DIFERENTE       reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    IGUALIGUAL      reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    MAS             reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    MENOS           reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    PTCOMA          reduce using rule 20 (expresion -> expresion MENOS expresion .)
+    MULTIPLICACION  shift and go to state 35
+    DIVISION        shift and go to state 36
+
+  ! MULTIPLICACION  [ reduce using rule 20 (expresion -> expresion MENOS expresion .) ]
+  ! DIVISION        [ reduce using rule 20 (expresion -> expresion MENOS expresion .) ]
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+  ! MAS             [ shift and go to state 33 ]
+  ! MENOS           [ shift and go to state 34 ]
+
+
+state 52
+
+    (21) expresion -> expresion MULTIPLICACION expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    OR              reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    AND             reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    MENOR           reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    MAYOR           reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    MAYORIGUAL      reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    MENORIGUAL      reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    DIFERENTE       reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    IGUALIGUAL      reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    MAS             reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    MENOS           reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    MULTIPLICACION  reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    DIVISION        reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+    PTCOMA          reduce using rule 21 (expresion -> expresion MULTIPLICACION expresion .)
+
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+  ! MAS             [ shift and go to state 33 ]
+  ! MENOS           [ shift and go to state 34 ]
+  ! MULTIPLICACION  [ shift and go to state 35 ]
+  ! DIVISION        [ shift and go to state 36 ]
+
+
+state 53
+
+    (22) expresion -> expresion DIVISION expresion .
+    (9) expresion -> expresion . OR expresion
+    (10) expresion -> expresion . AND expresion
+    (12) expresion -> expresion . MENOR expresion
+    (13) expresion -> expresion . MAYOR expresion
+    (14) expresion -> expresion . MAYORIGUAL expresion
+    (15) expresion -> expresion . MENORIGUAL expresion
+    (16) expresion -> expresion . DIFERENTE expresion
+    (17) expresion -> expresion . IGUALIGUAL expresion
+    (19) expresion -> expresion . MAS expresion
+    (20) expresion -> expresion . MENOS expresion
+    (21) expresion -> expresion . MULTIPLICACION expresion
+    (22) expresion -> expresion . DIVISION expresion
+
+    PDER            reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    OR              reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    AND             reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    MENOR           reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    MAYOR           reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    MAYORIGUAL      reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    MENORIGUAL      reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    DIFERENTE       reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    IGUALIGUAL      reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    MAS             reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    MENOS           reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    MULTIPLICACION  reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    DIVISION        reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+    PTCOMA          reduce using rule 22 (expresion -> expresion DIVISION expresion .)
+
+  ! OR              [ shift and go to state 25 ]
+  ! AND             [ shift and go to state 26 ]
+  ! MENOR           [ shift and go to state 27 ]
+  ! MAYOR           [ shift and go to state 28 ]
+  ! MAYORIGUAL      [ shift and go to state 29 ]
+  ! MENORIGUAL      [ shift and go to state 30 ]
+  ! DIFERENTE       [ shift and go to state 31 ]
+  ! IGUALIGUAL      [ shift and go to state 32 ]
+  ! MAS             [ shift and go to state 33 ]
+  ! MENOS           [ shift and go to state 34 ]
+  ! MULTIPLICACION  [ shift and go to state 35 ]
+  ! DIVISION        [ shift and go to state 36 ]
+
+
+state 54
+
+    (6) declaracion -> INT ID IGUAL expresion PTCOMA .
+
+    PRINT           reduce using rule 6 (declaracion -> INT ID IGUAL expresion PTCOMA .)
+    INT             reduce using rule 6 (declaracion -> INT ID IGUAL expresion PTCOMA .)
+    $end            reduce using rule 6 (declaracion -> INT ID IGUAL expresion PTCOMA .)
 

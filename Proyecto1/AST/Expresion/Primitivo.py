@@ -1,10 +1,7 @@
 from enum import Enum
 
 from AST.Abstract.Expression import Expression
-
-class TIPO_DATO(Enum):
-    ENTERO = 0,
-    DECIMAL = 1
+from Entorno.RetornoType import RetornoType
 
 
 class Primitivo(Expression):
@@ -13,5 +10,5 @@ class Primitivo(Expression):
         self.valor = valor
         self.tipoDato = tipoDato
 
-    def obtenerValor(self, entorno):
-        return self.valor
+    def obtenerValor(self, entorno)-> RetornoType:
+        return RetornoType(self.valor, self.tipoDato)
