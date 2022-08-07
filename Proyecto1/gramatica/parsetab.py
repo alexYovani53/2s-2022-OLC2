@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftMASMENOSleftMULTIPLICACIONDIVISIONCORDER CORIZQ DECIMAL DIVISION ENTERO ID INT MAS MENOS MULTIPLICACION PDER PIZQ PRINT PTCOMAinit :  instruccionesinstrucciones : instrucciones instruccion instrucciones : instruccioninstruccion : print_instprint_inst : PRINT PIZQ expression PDERexpression : expression MAS expression\n                 | expression MENOS expressionexpression : ENTERO\n                    | DECIMAL'
+_lr_signature = 'leftORleftANDnonassocMAYORMENORIGUALMENORMAYORIGUALIGUALIGUALDIFERENTEleftMASMENOSleftMULTIPLICACIONDIVISIONrightNOTUMENOSAND CADENA CORDER CORIZQ DECIMAL DIFERENTE DIVISION DOBLEPT ENTERO FALSE ID IGUAL IGUALIGUAL INT MAS MAYOR MAYORIGUAL MENOR MENORIGUAL MENOS MULTIPLICACION NOT OR PDER PIZQ PRINT PTCOMA TRUEinit :  instruccionesinstrucciones : instrucciones instruccion instrucciones : instruccioninstruccion : print_inst\n                   | declaracion  declaracion : INT ID  IGUAL expresion  PTCOMA\n                    | INT ID PTCOMA print_inst : PRINT PIZQ expresion PDER PTCOMAexpresion : expresion OR expresion\n                 | expresion AND expresion\n                 | NOT expresion %prec NOTexpresion : expresion MENOR expresion\n                 | expresion MAYOR expresion\n                 | expresion MAYORIGUAL expresion\n                 | expresion MENORIGUAL expresion\n                 | expresion DIFERENTE expresion\n                 | expresion IGUALIGUAL expresionexpresion : MENOS expresion %prec UMENOS\n                 | expresion MAS expresion\n                 | expresion MENOS expresion\n                 | expresion MULTIPLICACION expresion\n                 | expresion DIVISION expresion\n                 | PIZQ expresion PDERexpresion : ENTERO\n                    | DECIMAL\n                    | ID\n                    | CADENA\n                    | TRUE\n                    | FALSE'
     
-_lr_action_items = {'PRINT':([0,2,3,4,6,11,],[5,5,-3,-4,-2,-5,]),'$end':([1,2,3,4,6,11,],[0,-1,-3,-4,-2,-5,]),'PIZQ':([5,],[7,]),'ENTERO':([7,12,13,],[9,9,9,]),'DECIMAL':([7,12,13,],[10,10,10,]),'PDER':([8,9,10,14,15,],[11,-8,-9,-6,-7,]),'MAS':([8,9,10,14,15,],[12,-8,-9,-6,-7,]),'MENOS':([8,9,10,14,15,],[13,-8,-9,-6,-7,]),}
+_lr_action_items = {'PRINT':([0,2,3,4,5,8,22,41,54,],[6,6,-3,-4,-5,-2,-7,-8,-6,]),'INT':([0,2,3,4,5,8,22,41,54,],[7,7,-3,-4,-5,-2,-7,-8,-6,]),'$end':([1,2,3,4,5,8,22,41,54,],[0,-1,-3,-4,-5,-2,-7,-8,-6,]),'PIZQ':([6,9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[9,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'ID':([7,9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[10,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,]),'NOT':([9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,]),'MENOS':([9,11,12,13,14,15,16,17,18,19,20,21,23,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[14,14,34,14,14,-24,-25,-26,-27,-28,-29,14,34,14,14,14,14,14,14,14,14,14,14,14,14,-11,-18,34,-23,34,34,34,34,34,34,34,34,-19,-20,-21,-22,]),'ENTERO':([9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,]),'DECIMAL':([9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,]),'CADENA':([9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,]),'TRUE':([9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,]),'FALSE':([9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,]),'IGUAL':([10,],[21,]),'PTCOMA':([10,15,16,17,18,19,20,24,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[22,-24,-25,-26,-27,-28,-29,41,-11,-18,54,-23,-9,-10,-12,-13,-14,-15,-16,-17,-19,-20,-21,-22,]),'PDER':([12,15,16,17,18,19,20,23,37,38,40,42,43,44,45,46,47,48,49,50,51,52,53,],[24,-24,-25,-26,-27,-28,-29,40,-11,-18,-23,-9,-10,-12,-13,-14,-15,-16,-17,-19,-20,-21,-22,]),'OR':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[25,-24,-25,-26,-27,-28,-29,25,-11,-18,25,-23,-9,-10,-12,-13,-14,-15,-16,-17,-19,-20,-21,-22,]),'AND':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[26,-24,-25,-26,-27,-28,-29,26,-11,-18,26,-23,26,-10,-12,-13,-14,-15,-16,-17,-19,-20,-21,-22,]),'MENOR':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[27,-24,-25,-26,-27,-28,-29,27,-11,-18,27,-23,27,27,None,None,None,None,None,None,-19,-20,-21,-22,]),'MAYOR':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[28,-24,-25,-26,-27,-28,-29,28,-11,-18,28,-23,28,28,None,None,None,None,None,None,-19,-20,-21,-22,]),'MAYORIGUAL':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[29,-24,-25,-26,-27,-28,-29,29,-11,-18,29,-23,29,29,None,None,None,None,None,None,-19,-20,-21,-22,]),'MENORIGUAL':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[30,-24,-25,-26,-27,-28,-29,30,-11,-18,30,-23,30,30,None,None,None,None,None,None,-19,-20,-21,-22,]),'DIFERENTE':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[31,-24,-25,-26,-27,-28,-29,31,-11,-18,31,-23,31,31,None,None,None,None,None,None,-19,-20,-21,-22,]),'IGUALIGUAL':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[32,-24,-25,-26,-27,-28,-29,32,-11,-18,32,-23,32,32,None,None,None,None,None,None,-19,-20,-21,-22,]),'MAS':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[33,-24,-25,-26,-27,-28,-29,33,-11,-18,33,-23,33,33,33,33,33,33,33,33,-19,-20,-21,-22,]),'MULTIPLICACION':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[35,-24,-25,-26,-27,-28,-29,35,-11,-18,35,-23,35,35,35,35,35,35,35,35,35,35,-21,-22,]),'DIVISION':([12,15,16,17,18,19,20,23,37,38,39,40,42,43,44,45,46,47,48,49,50,51,52,53,],[36,-24,-25,-26,-27,-28,-29,36,-11,-18,36,-23,36,36,36,36,36,36,36,36,36,36,-21,-22,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'init':([0,],[1,]),'instrucciones':([0,],[2,]),'instruccion':([0,2,],[3,6,]),'print_inst':([0,2,],[4,4,]),'expression':([7,12,13,],[8,14,15,]),}
+_lr_goto_items = {'init':([0,],[1,]),'instrucciones':([0,],[2,]),'instruccion':([0,2,],[3,8,]),'print_inst':([0,2,],[4,4,]),'declaracion':([0,2,],[5,5,]),'expresion':([9,11,13,14,21,25,26,27,28,29,30,31,32,33,34,35,36,],[12,23,37,38,39,42,43,44,45,46,47,48,49,50,51,52,53,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,13 +27,33 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> init","S'",1,None,None,None),
-  ('init -> instrucciones','init',1,'p_init','gramatica.py',89),
-  ('instrucciones -> instrucciones instruccion','instrucciones',2,'p_instrucciones','gramatica.py',94),
-  ('instrucciones -> instruccion','instrucciones',1,'p_instrucciones_instruccion','gramatica.py',100),
-  ('instruccion -> print_inst','instruccion',1,'p_instruccion','gramatica.py',105),
-  ('print_inst -> PRINT PIZQ expression PDER','print_inst',4,'p_print','gramatica.py',110),
-  ('expression -> expression MAS expression','expression',3,'p_expression_aritmetica','gramatica.py',116),
-  ('expression -> expression MENOS expression','expression',3,'p_expression_aritmetica','gramatica.py',117),
-  ('expression -> ENTERO','expression',1,'p_expression_primitiva','gramatica.py',126),
-  ('expression -> DECIMAL','expression',1,'p_expression_primitiva','gramatica.py',127),
+  ('init -> instrucciones','init',1,'p_init','gramatica.py',132),
+  ('instrucciones -> instrucciones instruccion','instrucciones',2,'p_instrucciones','gramatica.py',137),
+  ('instrucciones -> instruccion','instrucciones',1,'p_instrucciones_instruccion','gramatica.py',143),
+  ('instruccion -> print_inst','instruccion',1,'p_instruccion','gramatica.py',148),
+  ('instruccion -> declaracion','instruccion',1,'p_instruccion','gramatica.py',149),
+  ('declaracion -> INT ID IGUAL expresion PTCOMA','declaracion',5,'p_declaracion','gramatica.py',153),
+  ('declaracion -> INT ID PTCOMA','declaracion',3,'p_declaracion','gramatica.py',154),
+  ('print_inst -> PRINT PIZQ expresion PDER PTCOMA','print_inst',5,'p_print','gramatica.py',160),
+  ('expresion -> expresion OR expresion','expresion',3,'p_expresion_logica','gramatica.py',166),
+  ('expresion -> expresion AND expresion','expresion',3,'p_expresion_logica','gramatica.py',167),
+  ('expresion -> NOT expresion','expresion',2,'p_expresion_logica','gramatica.py',168),
+  ('expresion -> expresion MENOR expresion','expresion',3,'p_expresion_relacional','gramatica.py',177),
+  ('expresion -> expresion MAYOR expresion','expresion',3,'p_expresion_relacional','gramatica.py',178),
+  ('expresion -> expresion MAYORIGUAL expresion','expresion',3,'p_expresion_relacional','gramatica.py',179),
+  ('expresion -> expresion MENORIGUAL expresion','expresion',3,'p_expresion_relacional','gramatica.py',180),
+  ('expresion -> expresion DIFERENTE expresion','expresion',3,'p_expresion_relacional','gramatica.py',181),
+  ('expresion -> expresion IGUALIGUAL expresion','expresion',3,'p_expresion_relacional','gramatica.py',182),
+  ('expresion -> MENOS expresion','expresion',2,'p_expresion_aritmetica','gramatica.py',199),
+  ('expresion -> expresion MAS expresion','expresion',3,'p_expresion_aritmetica','gramatica.py',200),
+  ('expresion -> expresion MENOS expresion','expresion',3,'p_expresion_aritmetica','gramatica.py',201),
+  ('expresion -> expresion MULTIPLICACION expresion','expresion',3,'p_expresion_aritmetica','gramatica.py',202),
+  ('expresion -> expresion DIVISION expresion','expresion',3,'p_expresion_aritmetica','gramatica.py',203),
+  ('expresion -> PIZQ expresion PDER','expresion',3,'p_expresion_aritmetica','gramatica.py',204),
+  ('expresion -> ENTERO','expresion',1,'p_expresion_primitiva','gramatica.py',218),
+  ('expresion -> DECIMAL','expresion',1,'p_expresion_primitiva','gramatica.py',219),
+  ('expresion -> ID','expresion',1,'p_expresion_primitiva','gramatica.py',220),
+  ('expresion -> CADENA','expresion',1,'p_expresion_primitiva','gramatica.py',221),
+  ('expresion -> TRUE','expresion',1,'p_expresion_primitiva','gramatica.py',222),
+  ('expresion -> FALSE','expresion',1,'p_expresion_primitiva','gramatica.py',223),
 ]

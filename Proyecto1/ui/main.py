@@ -5,6 +5,8 @@ import gramatica.gramatica as g
 from ctypes import windll
 from tkinter import font
 
+from Entorno.EntornoTabla import EntornoTabla
+
 
 class UI(tkinter.Tk):
     def __init__(self):
@@ -100,10 +102,15 @@ class UI(tkinter.Tk):
 
     def ejecutar(self):
         texto = self.editorTexto.get(1.0, tkinter.END)
+
+        self.consola.delete('1.0', 'end')
+
+        ENTORNO_RAIZ = EntornoTabla(None)
+
         if texto != '':
             resultado = g.parse(texto)
             for i in resultado:
-                i.ejecutarInstr(None)
+                i.ejecutarInstr(ENTORNO_RAIZ, self.consola)
 
 
 if __name__ == '__main__':
