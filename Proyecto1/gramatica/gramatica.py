@@ -1,23 +1,33 @@
 import ply.yacc as yacc
 
 # *************************** SECCION DE ANALIZADOR LEXICO   **************************
+from AST.Ast import Ast
 from AST.Definicion.Declaracion import Declaracion
 from AST.Expresion.Identificador import Identificador
+from AST.Expresion.Llamada import Llamada
 from AST.Expresion.Operacion import Operacion, TIPO_OPERACION
 from AST.Expresion.Primitivo import  Primitivo
 from AST.Primitivo.Print import Print
 from Entorno.RetornoType import TIPO_DATO
+from Entorno.Simbolos.Funcion import Funcion
 
 reservadas = {
     'int': 'INT',
+    'string':'STRING_TYPE',
+    'float':'FLOAT',
+    'boolean':'BOOLEAN',
     'print': 'PRINT',
     'true': 'TRUE',
     'false': 'FALSE',
+
+    'void': 'VOID',
+    'return':'RETURN'
 }
 
 tokens = [
              'DOBLEPT',
              'PTCOMA',
+             'COMA',
              'PIZQ',
              'PDER',
              'CORIZQ',
@@ -48,6 +58,7 @@ tokens = [
 # definir tokens
 t_DOBLEPT = r'\:'
 t_PTCOMA = r';'
+t_COMA = r','
 t_PIZQ = r'\('
 t_PDER = r'\)'
 t_CORIZQ = r'\{'
@@ -130,9 +141,59 @@ precedence = (
 
 
 def p_init(t):
-    """init :  instrucciones"""
+    """init : funciones """
+    t[0] = Ast(t[1])
+
+def p_funciones_lista(t):
+    """funciones : funciones funcion"""
+    t[1].append(t[2])
     t[0] = t[1]
 
+def p_funciones_corte(t):
+    """funciones : funcion"""
+    t[0] = [t[1]]
+
+## public void funcionLlamada([int a, int b, string j]){
+## }
+
+def p_funcion(t):
+    """funcion : tipo_funcion ID PIZQ  PDER bloque
+               | tipo_funcion ID PIZQ lista_parametros PDER bloque"""
+
+    if len(t) == 6:
+        t[0] = Funcion(t[2],[],t[5], t[1])
+    else:
+        t[0] = Funcion(t[2],t[4], t[6],t[1])
+
+# ------------------------------------------ PARAMETROS FUCION
+
+def p_lista_parametros(t):
+    """ lista_parametros : lista_parametros COMA parametro"""
+    t[1].append(t[3])
+    t[0] = t[1]
+def p_lista_parametros_corte(t):
+    """ lista_parametros : parametro"""
+    t[0] = [t[1]]
+
+def p_parametro(t):
+    """ parametro : tipo_dato ID """
+    id = Identificador(t[2])
+    t[0] = Declaracion(id, None, t[1])
+
+# ------------------------------------------ BLOQUE
+
+def p_bloque(t):
+    """bloque  : CORIZQ  CORDER
+                | CORIZQ  instrucciones CORDER """
+
+    if len(t) == 3:
+        t[0] = []
+    else:
+        t[0] = t[2]
+
+
+
+# ------------------------------------------- INSTRUCCIONES
 
 def p_instrucciones(t):
     """instrucciones : instrucciones instruccion"""
@@ -146,22 +207,51 @@ def p_instrucciones_instruccion(t):
 
 
 def p_instruccion(t):
-    """instruccion : print_inst
-                   | declaracion """
+    """instruccion : print_inst PTCOMA
+                   | declaracion PTCOMA
+                   | llamada PTCOMA
+                   | return_inst PTCOMA """
     t[0] = t[1]
 
 def p_declaracion(t):
-    """ declaracion : INT ID  IGUAL expresion  PTCOMA
-                    | INT ID PTCOMA """
+    """ declaracion : tipo_dato ID  IGUAL expresion
+                    | tipo_dato PTCOMA """
 
-    t[0] = Declaracion(Identificador(t[2]), t[4] , TIPO_DATO.ENTERO)
+    t[0] = Declaracion(Identificador(t[2]), t[4] , t[1])
 
 
 def p_print(t):
-    """print_inst : PRINT PIZQ expresion PDER PTCOMA"""
+    """print_inst : PRINT PIZQ expresion PDER"""
     instr = Print(t[3])
     t[0] = instr
 
+
+def p_llamada(t):
+    """ llamada : ID PIZQ PDER
+                | ID PIZQ lista_expresiones PDER"""
+
+    if len(t) == 4:
+        t[0] = Llamada(t[1],[])
+    else:
+        t[0] = Llamada(t[1],t[3])
+
+def p_return_instr(t):
+    """ return_inst : RETURN
+                    | RETURN expresion"""
+
+
+
+# ________________________________________ LISTA EXPRESIONES
+def p_lista_expresiones(t):
+    """ lista_expresiones : lista_expresiones COMA  expresion"""
+    t[1].append(t[3])
+    t[0] = t[1]
+
+def p_lista_expresiones_corte(t):
+    """ lista_expresiones : expresion"""
+    t[0] = [t[1]]
+
+# ---------------------------------------- EXPRESIONES
 
 def p_expresion_logica(t):
     """expresion : expresion OR expresion
@@ -237,8 +327,50 @@ def p_expresion_primitiva(t):
         t[0] = Primitivo(False, TIPO_DATO.BOOLEAN)
 
 
+def p_otras_expresiones(t):
+    """ expresion : llamada """
+    t[0] = t[1]
+
+
+# ------------------------------------------ TIPOS DE RETORNO
+
+def p_tipo_retorno_funcion(t):
+    """ tipo_funcion : INT
+                     | STRING_TYPE
+                     | BOOLEAN
+                     | VOID
+                     | FLOAT"""
+
+    if t[1] == 'INT':
+        t[0] = TIPO_DATO.ENTERO
+    if t[1] == 'STRING_TYPE':
+        t[0] = TIPO_DATO.CADENA
+    if t[1] == 'BOOLEAN':
+        t[0] = TIPO_DATO.BOOLEAN
+    if t[1] == 'FLOAT':
+        t[0] = TIPO_DATO.DECIMAL
+    if t[1] == 'VOID':
+        t[0] = TIPO_DATO.VOID
+
+
+def p_tipo_dato(t):
+    """ tipo_dato : INT
+                     | STRING_TYPE
+                     | BOOLEAN
+                     | FLOAT"""
+
+    if t[1] == 'INT':
+        t[0] = TIPO_DATO.ENTERO
+    if t[1] == 'STRING_TYPE':
+        t[0] = TIPO_DATO.CADENA
+    if t[1] == 'BOOLEAN':
+        t[0] = TIPO_DATO.BOOLEAN
+    if t[1] == 'FLOAT':
+        t[0] = TIPO_DATO.DECIMAL
+
+
 def p_error(t):
-    print("SE ENCONTRO UN ERROR")
+    print(f"SE ENCONTRO UN ERROR {t}")
 
 
 # Definicion del parser

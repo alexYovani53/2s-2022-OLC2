@@ -6,6 +6,7 @@ from ctypes import windll
 from tkinter import font
 
 from Entorno.EntornoTabla import EntornoTabla
+from Entorno.Simbolos.Funcion import Funcion
 
 
 class UI(tkinter.Tk):
@@ -105,12 +106,23 @@ class UI(tkinter.Tk):
 
         self.consola.delete('1.0', 'end')
 
-        ENTORNO_RAIZ = EntornoTabla(None)
+        ENTORNO_RAIZ = EntornoTabla(self.consola, None )
 
         if texto != '':
-            resultado = g.parse(texto)
-            for i in resultado:
-                i.ejecutarInstr(ENTORNO_RAIZ, self.consola)
+            AST  = g.parse(texto)
+            for i in AST.listaInstrucciones:
+
+                if isinstance( i, Funcion):
+                    existeFuncion = ENTORNO_RAIZ.existeFuncion(i.identificador)
+
+                    if not existeFuncion:
+                        ENTORNO_RAIZ.agregarFuncion(i)
+
+            if ENTORNO_RAIZ.existeFuncion("main"):
+                funcionMain = ENTORNO_RAIZ.obtenerFuncion("main")
+                funcionMain.ejecutarInstr(ENTORNO_RAIZ)
+            else:
+                print("No existe main")
 
 
 if __name__ == '__main__':
