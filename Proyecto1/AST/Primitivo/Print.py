@@ -8,8 +8,8 @@ class Print(Instruccion):
     def __init__(self, expression):
         self.expression = expression
 
-    def ejecutarInstr(self, entorno, consola):
+    def ejecutarInstr(self, entorno):
 
         retorno = self.expression.obtenerValor(entorno)
 
-        consola.insert(tkinter.END, f"{retorno.valor} \n")
+        entorno.consola.insert(tkinter.END, f"{retorno.valor} \n")

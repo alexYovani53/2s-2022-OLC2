@@ -1,24 +1,44 @@
 from AST.Abstract.Instruccion import Instruccion
 from AST.Expresion.Identificador import Identificador
+from Entorno.RetornoType import RetornoType
 from Entorno.Simbolo import Simbolo
 
 
 class Declaracion(Instruccion):
 
-    def __init__(self, identificador:Identificador, expresion, tipo ):
+    def __init__(self, identificador: Identificador, expresion, tipo):
         self.identificador = identificador
-        self.expresion = expresion
+        self.valorInicializacion = expresion
         self.tipo = tipo
+        self.retornoCompilado = None
 
-    def ejecutarInstr(self, entorno, consola):
+    def ejecutarInstr(self, entorno):
 
-        existeSimbolo = entorno.existeSimbolo(self.identificador.nombre)
+        if self.valorInicializacion is not None or self.retornoCompilado is not None:
 
-        if not existeSimbolo:
+            retornoExpresion = RetornoType()
+            if self.valorInicializacion is not None:
+                retornoExpresion = self.valorInicializacion.obtenerValor(entorno)
+            else:
+                retornoExpresion = self.retornoCompilado
 
-            retornoExpresion = self.expresion.obtenerValor(entorno)
+            tipoDeclaracion = self.tipo
+            tipoExpresion = retornoExpresion.tipo
+
+            if tipoDeclaracion != tipoExpresion:
+                # manejo de errores
+                return
+
+            existeSimbolo = entorno.existeSimbolo(self.identificador.nombre)
+            if existeSimbolo:
+                # manejo de errores
+                return
 
             newSimbolo = Simbolo()
-            newSimbolo.iniciarSimboloPrimitivo(self.identificador.nombre,retornoExpresion.valor, tipo = self.tipo )
+            newSimbolo.iniciarSimboloPrimitivo(self.identificador.nombre, retornoExpresion.valor, tipo=self.tipo)
 
             entorno.agregarSimobolo(newSimbolo)
+
+
+        else:
+            pass

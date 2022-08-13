@@ -11,8 +11,17 @@ class Simbolo:
         self.tipo = TIPO_DATO.NULL
         self.constante = False
 
+        self.parametros = []
+        self.instrucciones = []
+
     def iniciarSimboloPrimitivo(self, identificador, valor, tipo, constante=False):
         self.identificador = identificador
         self.valor = valor
         self.tipo = tipo
         self.constante = constante
+
+    def iniciarSimboloFuncion(self, identificador,listaParametros,listaInstrucciones, tipo, ):
+        self.identificador = identificador
+        self.tipo = tipo
+        self.parametros = listaParametros
+        self.instrucciones = listaInstrucciones
