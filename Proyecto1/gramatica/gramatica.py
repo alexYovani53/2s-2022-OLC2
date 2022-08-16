@@ -374,7 +374,7 @@ def p_expresion_primitiva(t):
 
 def p_otras_expresiones(t):
     """ expresion : llamada
-                  | ID  { lista_expresion}"""
+                  """
     t[0] = t[1]
 
 
