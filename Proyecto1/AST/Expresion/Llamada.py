@@ -27,7 +27,11 @@ class Llamada(Instruccion, Expression):
             # manejo de errores
             return RetornoType()
 
-        funcion.ejecutarInstr(entorno)
+        retorno = funcion.ejecutarInstr(ENTORNO_FUNCION)
+        if retorno != None and isinstance(retorno,RetornoType):
+            return retorno
+        else:
+            return RetornoType()
 
     def ejecutarInstr(self, entorno):
         self.obtenerValor(entorno)

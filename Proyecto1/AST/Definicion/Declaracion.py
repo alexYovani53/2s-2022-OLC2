@@ -21,6 +21,7 @@ class Declaracion(Instruccion):
                 retornoExpresion = self.valorInicializacion.obtenerValor(entorno)
             else:
                 retornoExpresion = self.retornoCompilado
+                self.tipo = retornoExpresion.tipo
 
             tipoDeclaracion = self.tipo
             tipoExpresion = retornoExpresion.tipo

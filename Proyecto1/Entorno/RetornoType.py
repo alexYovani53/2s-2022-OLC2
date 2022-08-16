@@ -8,6 +8,9 @@ class TIPO_DATO(IntEnum):
     BOOLEAN = 3,
     VOID = 4,
     NULL = 5,
+    OBJETO = 6,
+    ARRAY = 7,
+    VECTOR = 8
 
 
 class RetornoType:
