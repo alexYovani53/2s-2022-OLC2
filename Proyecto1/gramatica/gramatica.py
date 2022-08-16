@@ -2,12 +2,14 @@ import ply.yacc as yacc
 
 # *************************** SECCION DE ANALIZADOR LEXICO   **************************
 from AST.Ast import Ast
+from AST.Control.Return_Instr import Return_Instr
 from AST.Definicion.Declaracion import Declaracion
 from AST.Expresion.Identificador import Identificador
 from AST.Expresion.Llamada import Llamada
 from AST.Expresion.Operacion import Operacion, TIPO_OPERACION
 from AST.Expresion.Primitivo import  Primitivo
 from AST.Primitivo.Print import Print
+from AST.flujo.If_Inst import IfInst
 from Entorno.RetornoType import TIPO_DATO
 from Entorno.Simbolos.Funcion import Funcion
 
@@ -21,7 +23,9 @@ reservadas = {
     'false': 'FALSE',
 
     'void': 'VOID',
-    'return':'RETURN'
+    'return':'RETURN_W',
+    'if':'IF_W',
+    'else':'ELSE_W'
 }
 
 tokens = [
@@ -111,13 +115,17 @@ def t_CADENA(t):
     t.value = t.value[1:-1]  # Eliminar las comillas dobles
     return  t
 
-def t_newLine(t):
-    r"""\n+"""
-    t.lexer.lineno += t.value.count('\n')
-
+# Comentario simple // ...
+def t_COMENTARIO_SIMPLE(t):
+    r'//.*\n'
+    t.lexer.lineno += 1
 
 t_ignore = " \t\r"
 
+
+def t_newLine(t):
+    r"""\n+"""
+    t.lexer.lineno += t.value.count('\n')
 
 def t_error(t):
     print(f"Se encontro un error lexico {t.value[0]}")
@@ -210,13 +218,14 @@ def p_instruccion(t):
     """instruccion : print_inst PTCOMA
                    | declaracion PTCOMA
                    | llamada PTCOMA
-                   | return_inst PTCOMA """
+                   | return_inst PTCOMA
+                   | if_instr """
     t[0] = t[1]
 
 def p_declaracion(t):
     """ declaracion : tipo_dato ID  IGUAL expresion
-                    | tipo_dato PTCOMA """
-
+                    | tipo_dato ID """
+    print(t[1])
     t[0] = Declaracion(Identificador(t[2]), t[4] , t[1])
 
 
@@ -236,9 +245,45 @@ def p_llamada(t):
         t[0] = Llamada(t[1],t[3])
 
 def p_return_instr(t):
-    """ return_inst : RETURN
-                    | RETURN expresion"""
+    """ return_inst : RETURN_W
+                    | RETURN_W expresion"""
 
+    if len(t) == 2:
+        t[0] = Return_Instr(TIPO_DATO.VOID, None)
+    else:
+        t[0] = Return_Instr(TIPO_DATO.NULL, t[2])
+
+
+# if , if - else , if-elseif-else, if - elseif- elseif
+def p_if_instr(t):
+    """ if_instr :  IF_W PIZQ expresion PDER bloque
+                 |  IF_W PIZQ expresion PDER bloque ELSE_W bloque
+                 |  IF_W PIZQ expresion PDER bloque  listaelseif
+                 |  IF_W PIZQ expresion PDER bloque  listaelseif ELSE_W bloque"""
+
+    if len(t) == 6:
+        t[0] = IfInst(t[3], t[5], [],[])
+    elif len(t) == 7:
+        t[0] = IfInst(t[3], t[5], t[6],[])
+    elif len(t) == 8:
+        t[0] = IfInst(t[3], t[5], [],t[7])
+    else:
+        t[0] = IfInst(t[3], t[5], t[6],t[8])
+
+
+
+def p_lista_else_if(t):
+    """ listaelseif : listaelseif else_if  """
+    t[1].append(t[2])
+    t[0] = t[1]
+
+def p_lista_else_if_corte(t):
+    """ listaelseif : else_if"""
+    t[0] = [t[1]]
+
+def p_else_if(t):
+    """ else_if : ELSE_W IF_W PIZQ expresion PDER bloque"""
+    t[0] = IfInst(t[4],t[6], [],[])
 
 
 # ________________________________________ LISTA EXPRESIONES
@@ -328,7 +373,8 @@ def p_expresion_primitiva(t):
 
 
 def p_otras_expresiones(t):
-    """ expresion : llamada """
+    """ expresion : llamada
+                  | ID  { lista_expresion}"""
     t[0] = t[1]
 
 
@@ -341,15 +387,15 @@ def p_tipo_retorno_funcion(t):
                      | VOID
                      | FLOAT"""
 
-    if t[1] == 'INT':
+    if t[1] == 'int':
         t[0] = TIPO_DATO.ENTERO
-    if t[1] == 'STRING_TYPE':
+    if t[1] == 'string':
         t[0] = TIPO_DATO.CADENA
-    if t[1] == 'BOOLEAN':
+    if t[1] == 'boolean':
         t[0] = TIPO_DATO.BOOLEAN
-    if t[1] == 'FLOAT':
+    if t[1] == 'float':
         t[0] = TIPO_DATO.DECIMAL
-    if t[1] == 'VOID':
+    if t[1] == 'void':
         t[0] = TIPO_DATO.VOID
 
 
@@ -359,13 +405,13 @@ def p_tipo_dato(t):
                      | BOOLEAN
                      | FLOAT"""
 
-    if t[1] == 'INT':
+    if t[1] == 'int':
         t[0] = TIPO_DATO.ENTERO
-    if t[1] == 'STRING_TYPE':
+    if t[1] == 'string':
         t[0] = TIPO_DATO.CADENA
-    if t[1] == 'BOOLEAN':
+    if t[1] == 'boolean':
         t[0] = TIPO_DATO.BOOLEAN
-    if t[1] == 'FLOAT':
+    if t[1] == 'float':
         t[0] = TIPO_DATO.DECIMAL
 
 

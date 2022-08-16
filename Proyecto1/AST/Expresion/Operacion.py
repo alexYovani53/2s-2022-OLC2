@@ -82,3 +82,10 @@ class Operacion(Expression):
                     elif tipoResultante == TIPO_DATO.NULL:
                         print(f"ERROOOOOOOOOOOR, NO SE PUEDE OPERAR {retornoIzq.tipo} con {retornoDer.tipo}")
                         return RetornoType()
+
+            case TIPO_OPERACION.AND:
+
+                if retornoIzq.tipo != TIPO_DATO.BOOLEAN or retornoDer.tipo != TIPO_DATO.BOOLEAN:
+                    return RetornoType()
+                else:
+                    return RetornoType( valor = retornoIzq.valor and retornoDer.valor, tipo= TIPO_DATO.BOOLEAN )

@@ -1,8 +1,18 @@
 from AST.Abstract.Instruccion import Instruccion
+from Entorno.RetornoType import RetornoType, TIPO_DATO
 from Entorno.Simbolo import Simbolo
 
 
 class Funcion(Simbolo, Instruccion):
+
+
+    comparacionTipo = [
+        [TIPO_DATO.ENTERO, TIPO_DATO.DECIMAL, TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.NULL],
+        [TIPO_DATO.DECIMAL, TIPO_DATO.DECIMAL, TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.NULL],
+        [TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.CADENA, TIPO_DATO.NULL, TIPO_DATO.NULL],
+        [TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.BOOLEAN, TIPO_DATO.NULL],
+        [TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.NULL, TIPO_DATO.VOID],
+    ]
 
     def __init__(self, identificador, listaParametros, listaInstrucciones, tipo):
         super().__init__()
@@ -26,7 +36,22 @@ class Funcion(Simbolo, Instruccion):
     def ejecutarInstr(self, entorno):
 
         for instruccion in self.instrucciones:
-            instruccion.ejecutarInstr(entorno)
+
+            valorRetorno = instruccion.ejecutarInstr(entorno)
+
+            if valorRetorno is not None:
+
+                if isinstance(valorRetorno, RetornoType):
+
+                    validarTipo = Funcion.comparacionTipo[self.tipo][valorRetorno.tipo]
+
+                    if validarTipo is not TIPO_DATO.NULL:
+
+                        return valorRetorno
+
+                    else:
+                        #manejo de errores
+                        return RetornoType()
 
 
 
