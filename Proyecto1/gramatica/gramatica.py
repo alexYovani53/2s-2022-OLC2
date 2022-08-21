@@ -202,17 +202,6 @@ def p_bloque_clase(t):
         t[0] = []
 
 
-def p_instrs_clase(t):
-    """ instrs_clase : instrs_clase instruccion """
-    t[1].append(t[2])
-    t[0] = t[1]
-
-
-def p_instrs_clase_corte(t):
-    """ instrs_clase :  instruccion  """
-    t[0] = [t[1]]
-
-
 
 def p_funcion(t):
     """funcion : tipo_funcion ID PIZQ  PDER bloque
@@ -254,6 +243,21 @@ def p_bloque(t):
     else:
         t[0] = t[2]
 
+# ------------------------------------------ INSTRUCCIONES CLASE
+def p_instrs_clase(t):
+    """ instrs_clase : instrs_clase instr """
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_instrs_clase_corte(t):
+    """ instrs_clase :  instr """
+    t[0] = [t[1]]
+
+def p_instr(t):
+    """ instr : declaracion PTCOMA"""
+    t[0] = t[1]
+
 
 # ------------------------------------------- INSTRUCCIONES
 
@@ -276,6 +280,7 @@ def p_instruccion(t):
                    | return_inst PTCOMA
                    | if_instr """
     t[0] = t[1]
+
 
 
 def p_declaracion(t):
