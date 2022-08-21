@@ -20,6 +20,7 @@ void main(){
         print("Ninguna opción");
     }
 
+    crearObjeto();
 }
 
 
@@ -27,42 +28,14 @@ int calcularSuma(int a, int b){
     return a + b;
 }
 
-
-
-
-
-
-
-void main(){
-    int a = 5;
-    int b = 10;
-    string saludo = "hola mundo";
-    int resultado = calcularSuma(a,b);
-    string cadena = concatenar(saludo, " "+resultado);
-    print(cadena);
-
-    let mut instancia = new Objeto();
-
-
+void crearObjeto(){
+    Curso compiladores = new Curso("Compiladores","N",10);
+    print(compiladores.nombre);
 }
 
 
-int calcularSuma(int a, int b){
-    return a + b;
-}
-
-int concatenar(string origen, string origen2){
-    return origen + " " +origen2;
-}
-
-
-// DEFINICION DE CLASE (instruccion)   
-// definicion.ejecutar(entorno)
-struct Objeto {
-    int a,
-    string cadena
-    
-    funcion(){
-        print(b)
-    }
+class Curso {
+    string nombre;
+    string seccion;
+    int valor:
 }

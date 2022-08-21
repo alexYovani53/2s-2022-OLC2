@@ -38,7 +38,7 @@ class Declaracion(Instruccion):
             newSimbolo = Simbolo()
             newSimbolo.iniciarSimboloPrimitivo(self.identificador.nombre, retornoExpresion.valor, tipo=self.tipo)
 
-            entorno.agregarSimobolo(newSimbolo)
+            entorno.agregarSimbolo(newSimbolo)
 
 
         else:

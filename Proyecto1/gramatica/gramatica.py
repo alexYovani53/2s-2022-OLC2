@@ -4,10 +4,14 @@ import ply.yacc as yacc
 from AST.Ast import Ast
 from AST.Control.Return_Instr import Return_Instr
 from AST.Definicion.Declaracion import Declaracion
+from AST.Definicion.Objetos.CrearInstanciaObjeto import CrearInstanciaObjeto
+from AST.Definicion.Objetos.GuardarClase import GuardarClase
+from AST.Expresion.Acceso.AccesObjeto import AccesoObjeto
 from AST.Expresion.Identificador import Identificador
+from AST.Expresion.InstanciaObjeto.InstanciaObjeto import InstanciaObjeto
 from AST.Expresion.Llamada import Llamada
 from AST.Expresion.Operacion import Operacion, TIPO_OPERACION
-from AST.Expresion.Primitivo import  Primitivo
+from AST.Expresion.Primitivo import Primitivo
 from AST.Primitivo.Print import Print
 from AST.flujo.If_Inst import IfInst
 from Entorno.RetornoType import TIPO_DATO
@@ -15,21 +19,25 @@ from Entorno.Simbolos.Funcion import Funcion
 
 reservadas = {
     'int': 'INT',
-    'string':'STRING_TYPE',
-    'float':'FLOAT',
-    'boolean':'BOOLEAN',
+    'string': 'STRING_TYPE',
+    'float': 'FLOAT',
+    'boolean': 'BOOLEAN',
     'print': 'PRINT',
     'true': 'TRUE',
     'false': 'FALSE',
 
     'void': 'VOID',
-    'return':'RETURN_W',
-    'if':'IF_W',
-    'else':'ELSE_W'
+    'return': 'RETURN_W',
+    'if': 'IF_W',
+    'else': 'ELSE_W',
+
+    'class': 'CLASS',
+    'new': 'NEW'
 }
 
 tokens = [
              'DOBLEPT',
+             'PUNTO',
              'PTCOMA',
              'COMA',
              'PIZQ',
@@ -61,6 +69,7 @@ tokens = [
 
 # definir tokens
 t_DOBLEPT = r'\:'
+t_PUNTO = r'\.'
 t_PTCOMA = r';'
 t_COMA = r','
 t_PIZQ = r'\('
@@ -113,12 +122,14 @@ def t_ID(t):
 def t_CADENA(t):
     """\".*?\""""
     t.value = t.value[1:-1]  # Eliminar las comillas dobles
-    return  t
+    return t
+
 
 # Comentario simple // ...
 def t_COMENTARIO_SIMPLE(t):
     r'//.*\n'
     t.lexer.lineno += 1
+
 
 t_ignore = " \t\r"
 
@@ -127,10 +138,15 @@ def t_newLine(t):
     r"""\n+"""
     t.lexer.lineno += t.value.count('\n')
 
+
 def t_error(t):
     print(f"Se encontro un error lexico {t.value[0]}")
     t.lexer.skip(1)
 
+textoEntrada = ""
+def find_columna(t):
+    line_start = textoEntrada.rfind('\n',0, t.lexpos) + 1
+    return (t.lexpos - line_start) + 1
 
 # creando el lexer
 import ply.lex as lex
@@ -149,29 +165,64 @@ precedence = (
 
 
 def p_init(t):
-    """init : funciones """
+    """init : clases_funciones """
+
     t[0] = Ast(t[1])
 
-def p_funciones_lista(t):
-    """funciones : funciones funcion"""
+
+def p_clases_funciones(t):
+    """ clases_funciones : clases_funciones clase_funcion """
     t[1].append(t[2])
     t[0] = t[1]
 
-def p_funciones_corte(t):
-    """funciones : funcion"""
+
+def p_clases_funciones_corte(t):
+    """ clases_funciones : clase_funcion """
     t[0] = [t[1]]
 
-## public void funcionLlamada([int a, int b, string j]){
-## }
+
+def p_clase_funcion(t):
+    """ clase_funcion : clase
+                      | funcion"""
+
+    t[0] = t[1]
+
+
+def p_clase(t):
+    """  clase : CLASS ID bloqueClase"""
+    t[0] = GuardarClase(idClase=t[2], listaInstrucciones=t[3])
+
+
+def p_bloque_clase(t):
+    """ bloqueClase : CORIZQ instrs_clase CORDER
+                    | CORIZQ  CORDER"""
+    if len(t) == 4:
+        t[0] = t[2]
+    else:
+        t[0] = []
+
+
+def p_instrs_clase(t):
+    """ instrs_clase : instrs_clase instruccion """
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_instrs_clase_corte(t):
+    """ instrs_clase :  instruccion  """
+    t[0] = [t[1]]
+
+
 
 def p_funcion(t):
     """funcion : tipo_funcion ID PIZQ  PDER bloque
                | tipo_funcion ID PIZQ lista_parametros PDER bloque"""
 
     if len(t) == 6:
-        t[0] = Funcion(t[2],[],t[5], t[1])
+        t[0] = Funcion(t[2], [], t[5], t[1])
     else:
-        t[0] = Funcion(t[2],t[4], t[6],t[1])
+        t[0] = Funcion(t[2], t[4], t[6], t[1])
+
 
 # ------------------------------------------ PARAMETROS FUCION
 
@@ -179,14 +230,18 @@ def p_lista_parametros(t):
     """ lista_parametros : lista_parametros COMA parametro"""
     t[1].append(t[3])
     t[0] = t[1]
+
+
 def p_lista_parametros_corte(t):
     """ lista_parametros : parametro"""
     t[0] = [t[1]]
+
 
 def p_parametro(t):
     """ parametro : tipo_dato ID """
     id = Identificador(t[2])
     t[0] = Declaracion(id, None, t[1])
+
 
 # ------------------------------------------ BLOQUE
 
@@ -198,7 +253,6 @@ def p_bloque(t):
         t[0] = []
     else:
         t[0] = t[2]
-
 
 
 # ------------------------------------------- INSTRUCCIONES
@@ -217,16 +271,27 @@ def p_instrucciones_instruccion(t):
 def p_instruccion(t):
     """instruccion : print_inst PTCOMA
                    | declaracion PTCOMA
+                   | declaracion_objeto PTCOMA
                    | llamada PTCOMA
                    | return_inst PTCOMA
                    | if_instr """
     t[0] = t[1]
 
+
 def p_declaracion(t):
-    """ declaracion : tipo_dato ID  IGUAL expresion
+    """ declaracion : tipo_dato ID IGUAL expresion
                     | tipo_dato ID """
-    print(t[1])
-    t[0] = Declaracion(Identificador(t[2]), t[4] , t[1])
+
+    if len(t) == 3:
+        t[0] = Declaracion(Identificador(t[2]), None, t[1])
+    else:
+        t[0] = Declaracion(Identificador(t[2]), t[4], t[1])
+
+
+def p_declaracion_objeto(t):
+    """ declaracion_objeto : ID ID IGUAL expresion """
+
+    t[0] = CrearInstanciaObjeto(idClase=t[1], idInstancia=t[2], expresion=t[4])
 
 
 def p_print(t):
@@ -240,9 +305,10 @@ def p_llamada(t):
                 | ID PIZQ lista_expresiones PDER"""
 
     if len(t) == 4:
-        t[0] = Llamada(t[1],[])
+        t[0] = Llamada(t[1], [])
     else:
-        t[0] = Llamada(t[1],t[3])
+        t[0] = Llamada(t[1], t[3])
+
 
 def p_return_instr(t):
     """ return_inst : RETURN_W
@@ -262,14 +328,13 @@ def p_if_instr(t):
                  |  IF_W PIZQ expresion PDER bloque  listaelseif ELSE_W bloque"""
 
     if len(t) == 6:
-        t[0] = IfInst(t[3], t[5], [],[])
+        t[0] = IfInst(t[3], t[5], [], [])
     elif len(t) == 7:
-        t[0] = IfInst(t[3], t[5], t[6],[])
+        t[0] = IfInst(t[3], t[5], t[6], [])
     elif len(t) == 8:
-        t[0] = IfInst(t[3], t[5], [],t[7])
+        t[0] = IfInst(t[3], t[5], [], t[7])
     else:
-        t[0] = IfInst(t[3], t[5], t[6],t[8])
-
+        t[0] = IfInst(t[3], t[5], t[6], t[8])
 
 
 def p_lista_else_if(t):
@@ -277,13 +342,15 @@ def p_lista_else_if(t):
     t[1].append(t[2])
     t[0] = t[1]
 
+
 def p_lista_else_if_corte(t):
     """ listaelseif : else_if"""
     t[0] = [t[1]]
 
+
 def p_else_if(t):
     """ else_if : ELSE_W IF_W PIZQ expresion PDER bloque"""
-    t[0] = IfInst(t[4],t[6], [],[])
+    t[0] = IfInst(t[4], t[6], [], [])
 
 
 # ________________________________________ LISTA EXPRESIONES
@@ -292,9 +359,11 @@ def p_lista_expresiones(t):
     t[1].append(t[3])
     t[0] = t[1]
 
+
 def p_lista_expresiones_corte(t):
     """ lista_expresiones : expresion"""
     t[0] = [t[1]]
+
 
 # ---------------------------------------- EXPRESIONES
 
@@ -358,6 +427,8 @@ def p_expresion_primitiva(t):
                     | TRUE
                     | FALSE"""
 
+
+
     if t.slice[1].type == 'ENTERO':
         t[0] = Primitivo(t[1], TIPO_DATO.ENTERO)
     elif t.slice[1].type == 'DECIMAL':
@@ -374,8 +445,35 @@ def p_expresion_primitiva(t):
 
 def p_otras_expresiones(t):
     """ expresion : llamada
-                  """
+                  | acceso_objeto_expresion
+                  | instancia_objeto
+                  | if_instr"""
     t[0] = t[1]
+
+
+def p_acceso_objeto_expresion(t):
+    """ acceso_objeto_expresion : acceso_objeto"""
+    t[0] = AccesoObjeto(listaExpresiones=t[1])
+
+
+def p_acceso_objeto(t):
+    """ acceso_objeto : acceso_objeto  PUNTO expresion"""
+    t[1].append(t[3])
+    t[0] = t[1]
+
+
+def p_acceso_objeto_cort(t):
+    """ acceso_objeto : expresion"""
+    t[0] = [t[1]]
+
+
+def p_instancia_objeto(t):
+    """ instancia_objeto : NEW ID PIZQ PDER
+                         | NEW ID PIZQ lista_expresiones PDER"""
+    if len(t) == 5:
+        t[0] = InstanciaObjeto(idClase=t[2], listaExpresiones=[])
+    else:
+        t[0] = InstanciaObjeto(idClase=t[2], listaExpresiones=t[4])
 
 
 # ------------------------------------------ TIPOS DE RETORNO
