@@ -1,5 +1,5 @@
 from AST.Abstract.Expression import Expression
-from Entorno.RetornoType import RetornoType
+from Entorno.RetornoType import RetornoType, TIPO_DATO
 
 
 class Identificador(Expression):
@@ -12,4 +12,8 @@ class Identificador(Expression):
         simbolo = entorno.obtenerSimbolo(self.nombre)
 
         if existeSimbolo:
-            return RetornoType(valor=simbolo.valor, tipo=simbolo.tipo)
+
+            if simbolo.tipo == TIPO_DATO.OBJETO:
+                return RetornoType(valor=simbolo, tipo=TIPO_DATO.OBJETO)
+            else:
+                return RetornoType(valor=simbolo.valor, tipo=simbolo.tipo)
