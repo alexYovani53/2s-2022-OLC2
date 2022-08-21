@@ -18,7 +18,12 @@ class Llamada(Instruccion, Expression):
             # manejo de error
             return RetornoType()
 
-        ENTORNO_FUNCION = EntornoTabla(entorno.consola,entorno.padre)
+        if entorno.padre == None:
+            ENTORNO_FUNCION = EntornoTabla(entorno.consola,entorno)
+        else:
+            ENTORNO_FUNCION = EntornoTabla(entorno.consola, entorno.padre)
+
+
         funcion = entorno.obtenerFuncion(self.identificador)
 
         ejecutoParametros = funcion.ejecutarParametros(ENTORNO_FUNCION, self.listaExpresiones, entorno)

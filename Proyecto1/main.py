@@ -4,6 +4,7 @@ import tkinter.ttk
 from ctypes import windll
 from tkinter import font
 
+from AST.Definicion.Objetos.GuardarClase import GuardarClase
 from Entorno.EntornoTabla import EntornoTabla
 from Entorno.Simbolos.Funcion import Funcion
 from gramatica import gramatica
@@ -117,6 +118,9 @@ class UI(tkinter.Tk):
 
                     if not existeFuncion:
                         ENTORNO_RAIZ.agregarFuncion(i)
+
+                elif isinstance(i, GuardarClase):
+                    i.ejecutarInstr(ENTORNO_RAIZ)
 
             if ENTORNO_RAIZ.existeFuncion("main"):
                 funcionMain = ENTORNO_RAIZ.obtenerFuncion("main")
