@@ -1,4 +1,3 @@
-import tkinter as tk
 import tkinter.ttk
 
 from ctypes import windll
@@ -8,6 +7,7 @@ from AST.Definicion.Objetos.GuardarClase import GuardarClase
 from Entorno.EntornoTabla import EntornoTabla
 from Entorno.Simbolos.Funcion import Funcion
 from gramatica import gramatica
+# from graphivz import grafica, agregarInicio            no descomentar
 
 
 class UI(tkinter.Tk):
@@ -111,7 +111,8 @@ class UI(tkinter.Tk):
 
         if texto != '':
             AST  = gramatica.parse(texto)
-            for i in AST.listaInstrucciones:
+            for i  in AST.listaInstrucciones:
+                # agregarInicio(i.__str__()) no descomentar
 
                 if isinstance( i, Funcion):
                     existeFuncion = ENTORNO_RAIZ.existeFuncion(i.identificador)
@@ -125,6 +126,7 @@ class UI(tkinter.Tk):
             if ENTORNO_RAIZ.existeFuncion("main"):
                 funcionMain = ENTORNO_RAIZ.obtenerFuncion("main")
                 funcionMain.ejecutarInstr(ENTORNO_RAIZ)
+                # grafica.view() no descomentar
             else:
                 print("No existe main")
 
@@ -133,3 +135,4 @@ if __name__ == '__main__':
     windll.shcore.SetProcessDpiAwareness(1)
     ventana = UI()
     ventana.mainloop()
+

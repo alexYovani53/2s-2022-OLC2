@@ -19,6 +19,10 @@ class Simbolo:
         self.idClase = ""
         self.entornoInstancia = None
 
+        # simbolo arreglo
+        self.valores = []
+        self.dimensiones = []
+
 
     def iniciarSimboloPrimitivo(self, identificador, valor, tipo, constante=False):
         self.identificador = identificador
@@ -40,4 +44,9 @@ class Simbolo:
         self.idClase = idClase
         self.identificador = idInstancia
         self.entornoInstancia = entornoInstancia
+        self.tipo = tipo
+
+    def iniciarSimboloArreglo(self, tipo, dimensiones, valores):
+        self.dimensiones =dimensiones
+        self.valores = valores
         self.tipo = tipo
