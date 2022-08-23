@@ -3,10 +3,14 @@ import ply.yacc as yacc
 # *************************** SECCION DE ANALIZADOR LEXICO   **************************
 from AST.Ast import Ast
 from AST.Control.Return_Instr import Return_Instr
+from AST.Definicion.Arreglo.CrearArreglo import CrearArreglo
 from AST.Definicion.Declaracion import Declaracion
 from AST.Definicion.Objetos.CrearInstanciaObjeto import CrearInstanciaObjeto
 from AST.Definicion.Objetos.GuardarClase import GuardarClase
 from AST.Expresion.Acceso.AccesObjeto import AccesoObjeto
+from AST.Expresion.Acceso.AccesoArreglo import AccesoArreglo
+from AST.Expresion.Arreglo.ArrayData import ArrayData
+from AST.Expresion.Arreglo.ArrayInstancia import ArrayInstancia
 from AST.Expresion.Identificador import Identificador
 from AST.Expresion.InstanciaObjeto.InstanciaObjeto import InstanciaObjeto
 from AST.Expresion.Llamada import Llamada
@@ -42,6 +46,8 @@ tokens = [
              'COMA',
              'PIZQ',
              'PDER',
+             'LLAVEIZQ',
+             'LLAVEDER',
              'CORIZQ',
              'CORDER',
 
@@ -74,8 +80,10 @@ t_PTCOMA = r';'
 t_COMA = r','
 t_PIZQ = r'\('
 t_PDER = r'\)'
-t_CORIZQ = r'\{'
-t_CORDER = r'\}'
+t_LLAVEIZQ = r'\{'
+t_LLAVEDER = r'\}'
+t_CORIZQ = r'\['
+t_CORDER = r'\]'
 
 t_AND = r'\&\&'
 t_OR = r'\|\|'
@@ -143,10 +151,14 @@ def t_error(t):
     print(f"Se encontro un error lexico {t.value[0]}")
     t.lexer.skip(1)
 
+
 textoEntrada = ""
+
+
 def find_columna(t):
-    line_start = textoEntrada.rfind('\n',0, t.lexpos) + 1
+    line_start = textoEntrada.rfind('\n', 0, t.lexpos) + 1
     return (t.lexpos - line_start) + 1
+
 
 # creando el lexer
 import ply.lex as lex
@@ -194,24 +206,12 @@ def p_clase(t):
 
 
 def p_bloque_clase(t):
-    """ bloqueClase : CORIZQ instrs_clase CORDER
-                    | CORIZQ  CORDER"""
+    """ bloqueClase : LLAVEIZQ instrs_clase LLAVEDER
+                    | LLAVEIZQ  LLAVEDER"""
     if len(t) == 4:
         t[0] = t[2]
     else:
         t[0] = []
-
-
-def p_instrs_clase(t):
-    """ instrs_clase : instrs_clase instruccion """
-    t[1].append(t[2])
-    t[0] = t[1]
-
-
-def p_instrs_clase_corte(t):
-    """ instrs_clase :  instruccion  """
-    t[0] = [t[1]]
-
 
 
 def p_funcion(t):
@@ -246,13 +246,30 @@ def p_parametro(t):
 # ------------------------------------------ BLOQUE
 
 def p_bloque(t):
-    """bloque  : CORIZQ  CORDER
-                | CORIZQ  instrucciones CORDER """
+    """bloque  : LLAVEIZQ  LLAVEDER
+                | LLAVEIZQ  instrucciones LLAVEDER """
 
     if len(t) == 3:
         t[0] = []
     else:
         t[0] = t[2]
+
+
+# ------------------------------------------ INSTRUCCIONES CLASE
+def p_instrs_clase(t):
+    """ instrs_clase : instrs_clase instr """
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_instrs_clase_corte(t):
+    """ instrs_clase :  instr """
+    t[0] = [t[1]]
+
+
+def p_instr(t):
+    """ instr : declaracion PTCOMA"""
+    t[0] = t[1]
 
 
 # ------------------------------------------- INSTRUCCIONES
@@ -272,12 +289,14 @@ def p_instruccion(t):
     """instruccion : print_inst PTCOMA
                    | declaracion PTCOMA
                    | declaracion_objeto PTCOMA
+                   | declaracion_arreglo PTCOMA
                    | llamada PTCOMA
                    | return_inst PTCOMA
                    | if_instr """
     t[0] = t[1]
 
 
+# DECLARACION ------------------------
 def p_declaracion(t):
     """ declaracion : tipo_dato ID IGUAL expresion
                     | tipo_dato ID """
@@ -288,18 +307,41 @@ def p_declaracion(t):
         t[0] = Declaracion(Identificador(t[2]), t[4], t[1])
 
 
+# DECLARACION ARREGLO ----------------
+
+def p_declaracion_arreglo(t):
+    """ declaracion_arreglo : tipo_dato niveles ID IGUAL expresion """
+    t[0] = CrearArreglo(idInstancia=t[3], dimensiones=t[2], tipo=t[1], expresion=t[5])
+
+
+def p_niveles(t):
+    """niveles : niveles nivel """
+    t[1] += 1
+    t[0] = t[1]
+
+def p_niveles_corte(t):
+    """ niveles : nivel """
+    t[0] = 1
+
+def p_nivel(t):
+    """ nivel : CORIZQ CORDER """
+
+
+# DECLARACION OBJETO ----------------
 def p_declaracion_objeto(t):
     """ declaracion_objeto : ID ID IGUAL expresion """
 
     t[0] = CrearInstanciaObjeto(idClase=t[1], idInstancia=t[2], expresion=t[4])
 
 
+# PRINT ------------------------------
 def p_print(t):
     """print_inst : PRINT PIZQ expresion PDER"""
     instr = Print(t[3])
     t[0] = instr
 
 
+# LLAMADA -----------------------------
 def p_llamada(t):
     """ llamada : ID PIZQ PDER
                 | ID PIZQ lista_expresiones PDER"""
@@ -310,6 +352,7 @@ def p_llamada(t):
         t[0] = Llamada(t[1], t[3])
 
 
+# RETURNS -----------------------------
 def p_return_instr(t):
     """ return_inst : RETURN_W
                     | RETURN_W expresion"""
@@ -427,8 +470,6 @@ def p_expresion_primitiva(t):
                     | TRUE
                     | FALSE"""
 
-
-
     if t.slice[1].type == 'ENTERO':
         t[0] = Primitivo(t[1], TIPO_DATO.ENTERO)
     elif t.slice[1].type == 'DECIMAL':
@@ -446,11 +487,50 @@ def p_expresion_primitiva(t):
 def p_otras_expresiones(t):
     """ expresion : llamada
                   | acceso_objeto_expresion
+                  | acceso_array_expresion
                   | instancia_objeto
+                  | array_data
+                  | array_instancia
                   | if_instr"""
     t[0] = t[1]
 
 
+# ARRAY DATA --------------------------
+def p_array_data(t):
+    """ array_data : CORIZQ lista_expresiones CORDER"""
+    t[0] = ArrayData(listaExpresiones = t[2])
+
+# ARRAY INSTANCIA ---------------------
+def p_array_instancia(t):
+    """ array_instancia : NEW tipo_dato dimensiones"""
+    t[0] = ArrayInstancia(tipo = t[2], dimensiones = t[3])
+
+def p_dimensiones(t):
+    """ dimensiones : dimensiones dimension"""
+    t[1].append(t[2])
+    t[0] = t[1]
+
+
+def p_dimensiones_corte(t):
+    """ dimensiones : dimension"""
+    t[0] = [t[1]]
+
+def p_dimension(t):
+    """ dimension : CORIZQ expresion CORDER"""
+    t[0] = t[2]
+
+# INSTANCIA OBJETO -------------------------
+def p_instancia_objeto(t):
+    """ instancia_objeto : NEW ID PIZQ PDER
+                         | NEW ID PIZQ lista_expresiones PDER"""
+    if len(t) == 5:
+        t[0] = InstanciaObjeto(idClase=t[2], listaExpresiones=[])
+    else:
+        t[0] = InstanciaObjeto(idClase=t[2], listaExpresiones=t[4])
+
+
+
+# ACCESO A OBJETO  ----------------------
 def p_acceso_objeto_expresion(t):
     """ acceso_objeto_expresion : acceso_objeto"""
     t[0] = AccesoObjeto(listaExpresiones=t[1])
@@ -466,14 +546,14 @@ def p_acceso_objeto_cort(t):
     """ acceso_objeto : expresion"""
     t[0] = [t[1]]
 
+# ACCESO ARRAY ----------------------------
+def p_acceso_array(t):
+    """acceso_array_expresion : ID dimensiones"""
+    t[0] = AccesoArreglo( idArreglo = t[1] ,listaExpresiones = t[2])
 
-def p_instancia_objeto(t):
-    """ instancia_objeto : NEW ID PIZQ PDER
-                         | NEW ID PIZQ lista_expresiones PDER"""
-    if len(t) == 5:
-        t[0] = InstanciaObjeto(idClase=t[2], listaExpresiones=[])
-    else:
-        t[0] = InstanciaObjeto(idClase=t[2], listaExpresiones=t[4])
+
+
+
 
 
 # ------------------------------------------ TIPOS DE RETORNO

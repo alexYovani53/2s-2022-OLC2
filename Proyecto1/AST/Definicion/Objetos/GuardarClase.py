@@ -20,3 +20,5 @@ class GuardarClase(Instruccion):
         claseNueva = Clase(self.idClase,self.listaInstrucciones)
         entorno.agregarClase(claseNueva)
 
+    def __str__(self):
+        return f"GuardarClase ({self.idClase})"
