@@ -31,11 +31,26 @@ int calcularSuma(int a, int b){
 void crearObjeto(){
     Curso compiladores = new Curso("Compiladores","N",10);
     print(compiladores.nombre);
+
+    int [][][] array = [
+        [[5,77],[1,21]],
+        [[89,5],[5,75]]
+     ];
+    int [][][] array2 = new int[5][10][10];
+    print(array[0][0][0]);
+    print(array[0][0][1]);
+    print(array[0][1][0]);
+    print(array[0][1][1]);
+    print(array[1][0][0]);
+    print(array[1][0][1]);
+    print(array[1][1][0]);
+    print(array[1][1][1]);
+    print(array2[0][1][9]);
 }
 
 
 class Curso {
     string nombre;
     string seccion;
-    int valor:
+    int valor;
 }

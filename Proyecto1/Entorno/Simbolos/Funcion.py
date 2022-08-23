@@ -54,6 +54,5 @@ class Funcion(Simbolo, Instruccion):
                         return RetornoType()
 
 
-
-
-####  funcion ( int a, int b, int c)                funcion( expresion1, expresion2, expresion3)
+    def __str__(self):
+        return f"Funcion {self.identificador}"
