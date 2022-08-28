@@ -24,6 +24,16 @@ class EntornoTabla:
 
         return False
 
+
+    def existeSimboloEnActual(self,identificador):
+        entorno = self
+        existe = entorno.tabla.get(identificador)
+        if existe is not None:
+            return True
+        else:
+            return False
+
+
     def existeSimboloEnEntornoActual(self,identificador):
         existe = self.tabla.get(identificador)
         if existe is not None:

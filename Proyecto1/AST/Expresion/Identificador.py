@@ -13,7 +13,18 @@ class Identificador(Expression):
 
         if existeSimbolo:
 
-            if simbolo.tipo == TIPO_DATO.OBJETO:
-                return RetornoType(valor=simbolo, tipo=TIPO_DATO.OBJETO)
+            if simbolo.valorReferencia is not None:
+
+                simboloRef = simbolo.valorReferencia.obtenerValor(simbolo.entornoReferencia)
+
+                if simboloRef.tipo == TIPO_DATO.OBJETO:
+                    return RetornoType(valor=simboloRef, tipo=TIPO_DATO.OBJETO)
+                else:
+                    return RetornoType(valor=simboloRef.valor, tipo=simboloRef.tipo)
+
             else:
-                return RetornoType(valor=simbolo.valor, tipo=simbolo.tipo)
+
+                if simbolo.tipo == TIPO_DATO.OBJETO:
+                    return RetornoType(valor=simbolo, tipo=TIPO_DATO.OBJETO)
+                else:
+                    return RetornoType(valor=simbolo.valor, tipo=simbolo.tipo)

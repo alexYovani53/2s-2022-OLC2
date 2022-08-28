@@ -16,9 +16,7 @@ class InstanciaArreglo(Simbolo):
 
             if indiceDimension > (tamanoDimension-1):
                 return None
-
             else:
-
                 subArreglo = valores[indiceDimension]
                 return self.ObtenerValor(listaDimensiones, index+1, subArreglo)
 

@@ -24,6 +24,10 @@ class Simbolo:
         self.dimensiones = []
 
 
+        # referencia
+        self.entornoReferencia = None
+        self.valorReferencia = None
+
     def iniciarSimboloPrimitivo(self, identificador, valor, tipo, constante=False):
         self.identificador = identificador
         self.valor = valor

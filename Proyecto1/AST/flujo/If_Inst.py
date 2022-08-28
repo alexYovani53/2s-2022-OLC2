@@ -12,6 +12,7 @@ class IfInst(Instruccion):
 
     def ejecutarInstr(self, entorno):
 
+
         condicionPrincipal = self.condicion.obtenerValor(entorno)
 
         if condicionPrincipal.tipo != TIPO_DATO.BOOLEAN:
