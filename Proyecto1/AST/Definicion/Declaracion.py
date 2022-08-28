@@ -6,11 +6,15 @@ from Entorno.Simbolo import Simbolo
 
 class Declaracion(Instruccion):
 
-    def __init__(self, identificador: Identificador, expresion, tipo):
+    def __init__(self, identificador: Identificador, expresion, tipo, esReferencia = False):
         self.identificador = identificador
         self.valorInicializacion = expresion
         self.tipo = tipo
         self.retornoCompilado = None
+
+        self.esReferencia = esReferencia
+        self.entornoReferencia = None
+        self.valorReferencia = None
 
     def ejecutarInstr(self, entorno):
 
@@ -30,13 +34,24 @@ class Declaracion(Instruccion):
                 # manejo de errores
                 return
 
-            existeSimbolo = entorno.existeSimbolo(self.identificador.nombre)
+            existeSimbolo = entorno.existeSimboloEnActual(self.identificador.nombre)
             if existeSimbolo:
                 # manejo de errores
                 return
 
+
+
+
             newSimbolo = Simbolo()
             newSimbolo.iniciarSimboloPrimitivo(self.identificador.nombre, retornoExpresion.valor, tipo=self.tipo)
+
+            if self.esReferencia is True:
+                newSimbolo.entornoReferencia = self.entornoReferencia
+                newSimbolo.valorReferencia = self.valorReferencia
+                newSimbolo.iniciarSimboloPrimitivo(self.identificador.nombre, None, tipo=self.tipo)
+
+            else:
+                newSimbolo.iniciarSimboloPrimitivo(self.identificador.nombre, retornoExpresion.valor, tipo=self.tipo)
 
             entorno.agregarSimbolo(newSimbolo)
 

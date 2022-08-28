@@ -27,6 +27,11 @@ class Funcion(Simbolo, Instruccion):
 
         index = 0
         for declaracion in declaraciones:
+
+            if declaracion.esReferencia is True:
+                declaracion.entornoReferencia = entornoQueLlamo
+                declaracion.valorReferencia =  expresiones[index]
+
             declaracion.retornoCompilado = expresiones[index].obtenerValor(entornoQueLlamo)
             declaracion.ejecutarInstr(entornoFuncion)
             index += 1
@@ -37,6 +42,7 @@ class Funcion(Simbolo, Instruccion):
 
         for instruccion in self.instrucciones:
 
+            if instruccion is None: continue
             valorRetorno = instruccion.ejecutarInstr(entorno)
 
             if valorRetorno is not None:

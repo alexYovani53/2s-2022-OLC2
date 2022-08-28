@@ -238,10 +238,16 @@ def p_lista_parametros_corte(t):
 
 
 def p_parametro(t):
-    """ parametro : tipo_dato ID """
-    id = Identificador(t[2])
-    t[0] = Declaracion(id, None, t[1])
+    """ parametro : tipo_dato ID
+                  | MULTIPLICACION tipo_dato ID"""
 
+
+    if len(t) == 3:
+        id = Identificador(t[2])
+        t[0] = Declaracion(id, None, t[1])
+    else:
+        id = Identificador(t[3])
+        t[0] = Declaracion(id, None, t[2],True  )
 
 # ------------------------------------------ BLOQUE
 
@@ -281,7 +287,7 @@ def p_instrucciones(t):
 
 
 def p_instrucciones_instruccion(t):
-    """ instrucciones : instruccion"""
+    """ instrucciones : instruccion """
     t[0] = [t[1]]
 
 
@@ -292,8 +298,14 @@ def p_instruccion(t):
                    | declaracion_arreglo PTCOMA
                    | llamada PTCOMA
                    | return_inst PTCOMA
-                   | if_instr """
+                   | if_instr
+                   | p_error_sintaxis """
     t[0] = t[1]
+
+
+def p_error_sintaxis(t):
+    """ p_error_sintaxis : error PTCOMA """
+    print(f"Error sintactico en: ")
 
 
 # DECLARACION ------------------------
@@ -595,6 +607,7 @@ def p_tipo_dato(t):
 
 def p_error(t):
     print(f"SE ENCONTRO UN ERROR {t}")
+
 
 
 # Definicion del parser
