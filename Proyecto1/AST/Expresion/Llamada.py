@@ -18,10 +18,8 @@ class Llamada(Instruccion, Expression):
             # manejo de error
             return RetornoType()
 
-        if entorno.padre == None:
-            ENTORNO_FUNCION = EntornoTabla(entorno.consola,entorno)
-        else:
-            ENTORNO_FUNCION = EntornoTabla(entorno.consola, entorno.padre)
+
+        ENTORNO_FUNCION = EntornoTabla(entorno.consola, entorno)
 
 
         funcion = entorno.obtenerFuncion(self.identificador)
