@@ -2,13 +2,14 @@
 void main(){
     int a = 5;
     int b = 10;
-    string saludo = "hola mundo";
+    string saludo = "hola mundo"
     int resultado = calcularSuma(a,b);
+    print(resultado);
 
-    boolean op1 = true;
+    boolean op1 = true
     boolean op2 = false;
     boolean op3 = false;
-    boolean op4 = true;
+    boolean op4 = true
 
     if (op1 && op2){
         print("If correcto");
@@ -25,7 +26,7 @@ void main(){
 
 
 int calcularSuma(* int a, int b){
-    return a + b;
+    return a + b
 }
 
 void crearObjeto(){
@@ -41,7 +42,7 @@ void crearObjeto(){
         ]
      ];
 
-    int [][][] array2 = new int[5][10][10];
+    int [][][] array2 = new int[5][10][10]
     print(array[0][0][0]);
     print(array[0][0][1]);
     print(array[0][1][0]);
@@ -60,4 +61,16 @@ class Curso {
     string seccion;
     int valor;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 

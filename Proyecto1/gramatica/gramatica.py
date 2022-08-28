@@ -7,6 +7,7 @@ from AST.Definicion.Arreglo.CrearArreglo import CrearArreglo
 from AST.Definicion.Declaracion import Declaracion
 from AST.Definicion.Objetos.CrearInstanciaObjeto import CrearInstanciaObjeto
 from AST.Definicion.Objetos.GuardarClase import GuardarClase
+from AST.Error.CustomError import CustomError
 from AST.Expresion.Acceso.AccesObjeto import AccesoObjeto
 from AST.Expresion.Acceso.AccesoArreglo import AccesoArreglo
 from AST.Expresion.Arreglo.ArrayData import ArrayData
@@ -20,6 +21,9 @@ from AST.Primitivo.Print import Print
 from AST.flujo.If_Inst import IfInst
 from Entorno.RetornoType import TIPO_DATO
 from Entorno.Simbolos.Funcion import Funcion
+
+
+errores = []
 
 reservadas = {
     'int': 'INT',
@@ -148,17 +152,16 @@ def t_newLine(t):
 
 
 def t_error(t):
-    print(f"Se encontro un error lexico {t.value[0]}")
+    errores.append(CustomError("Lexico", "Error léxico: " + t.value[0], t.lexer.lineno, find_column(input, t)))
     t.lexer.skip(1)
 
 
 textoEntrada = ""
 
 
-def find_columna(t):
-    line_start = textoEntrada.rfind('\n', 0, t.lexpos) + 1
-    return (t.lexpos - line_start) + 1
-
+def find_column(inp, token):
+    line_start = inp.rfind('\n', 0, token.lexpos) + 1
+    return (token.lexpos - line_start) + 1
 
 # creando el lexer
 import ply.lex as lex
@@ -196,8 +199,12 @@ def p_clases_funciones_corte(t):
 def p_clase_funcion(t):
     """ clase_funcion : clase
                       | funcion"""
-
     t[0] = t[1]
+
+def p_clase_funcion_error(t):
+    """ clase_funcion : error LLAVEDER """
+    errores.append(CustomError("Sintáctico", "Error Sintáctico: " + str(t[1].value), t.lineno(1), find_column(input, t.slice[1])))
+    t[0] = ""
 
 
 def p_clase(t):
@@ -282,7 +289,8 @@ def p_instr(t):
 
 def p_instrucciones(t):
     """instrucciones : instrucciones instruccion"""
-    t[1].append(t[2])
+    if t[2] != -1:
+        t[1].append(t[2])
     t[0] = t[1]
 
 
@@ -298,14 +306,15 @@ def p_instruccion(t):
                    | declaracion_arreglo PTCOMA
                    | llamada PTCOMA
                    | return_inst PTCOMA
-                   | if_instr
-                   | p_error_sintaxis """
+                   | if_instr"""
     t[0] = t[1]
 
 
 def p_error_sintaxis(t):
-    """ p_error_sintaxis : error PTCOMA """
-    print(f"Error sintactico en: ")
+    """ instruccion : error PTCOMA """
+    t[0] = -1
+    errores.append(CustomError("Sintáctico", "Error Sintáctico: " + str(t[1].value), t.lineno(1), find_column(input, t.slice[1])))
+
 
 
 # DECLARACION ------------------------
@@ -606,7 +615,7 @@ def p_tipo_dato(t):
 
 
 def p_error(t):
-    print(f"SE ENCONTRO UN ERROR {t}")
+    print(f"SE ENCONTRO UN ERROR {t.value}")
 
 
 
@@ -615,7 +624,19 @@ def p_error(t):
 parser = yacc.yacc()
 
 
-def parse(input):
+
+
+def getErrores():
+    return errores
+
+input = ''
+def parse(inp):
     global lexer
+    global input
+    global errores
+
+
+    errores = []
+    input = inp
     lexer = lex.lex()
-    return parser.parse(input)
+    return parser.parse(inp)

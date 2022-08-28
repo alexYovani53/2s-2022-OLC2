@@ -4,6 +4,7 @@ from ctypes import windll
 from tkinter import font
 
 from AST.Definicion.Objetos.GuardarClase import GuardarClase
+from AST.Error.CustomError import CustomError
 from Entorno.EntornoTabla import EntornoTabla
 from Entorno.Simbolos.Funcion import Funcion
 from gramatica import gramatica
@@ -111,6 +112,11 @@ class UI(tkinter.Tk):
 
         if texto != '':
             AST  = gramatica.parse(texto)
+            listaErrores = gramatica.getErrores()
+            for err_ in listaErrores:
+                v:CustomError = err_
+                self.consola.insert(tkinter.END,v.toString()+"\n")
+
             for i  in AST.listaInstrucciones:
                 # agregarInicio(i.__str__()) no descomentar
 

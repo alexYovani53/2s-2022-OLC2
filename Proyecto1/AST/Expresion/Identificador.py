@@ -28,3 +28,6 @@ class Identificador(Expression):
                     return RetornoType(valor=simbolo, tipo=TIPO_DATO.OBJETO)
                 else:
                     return RetornoType(valor=simbolo.valor, tipo=simbolo.tipo)
+
+        else:
+            return RetornoType()
