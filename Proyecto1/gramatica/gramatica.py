@@ -22,7 +22,6 @@ from AST.flujo.If_Inst import IfInst
 from Entorno.RetornoType import TIPO_DATO
 from Entorno.Simbolos.Funcion import Funcion
 
-
 errores = []
 
 reservadas = {
@@ -163,6 +162,7 @@ def find_column(inp, token):
     line_start = inp.rfind('\n', 0, token.lexpos) + 1
     return (token.lexpos - line_start) + 1
 
+
 # creando el lexer
 import ply.lex as lex
 
@@ -201,9 +201,11 @@ def p_clase_funcion(t):
                       | funcion"""
     t[0] = t[1]
 
+
 def p_clase_funcion_error(t):
     """ clase_funcion : error LLAVEDER """
-    errores.append(CustomError("Sintáctico", "Error Sintáctico: " + str(t[1].value), t.lineno(1), find_column(input, t.slice[1])))
+    errores.append(
+        CustomError("Sintáctico", "Error Sintáctico: " + str(t[1].value), t.lineno(1), find_column(input, t.slice[1])))
     t[0] = ""
 
 
@@ -248,13 +250,13 @@ def p_parametro(t):
     """ parametro : tipo_dato ID
                   | MULTIPLICACION tipo_dato ID"""
 
-
     if len(t) == 3:
         id = Identificador(t[2])
         t[0] = Declaracion(id, None, t[1])
     else:
         id = Identificador(t[3])
-        t[0] = Declaracion(id, None, t[2],True  )
+        t[0] = Declaracion(id, None, t[2], True)
+
 
 # ------------------------------------------ BLOQUE
 
@@ -313,8 +315,8 @@ def p_instruccion(t):
 def p_error_sintaxis(t):
     """ instruccion : error PTCOMA """
     t[0] = -1
-    errores.append(CustomError("Sintáctico", "Error Sintáctico: " + str(t[1].value), t.lineno(1), find_column(input, t.slice[1])))
-
+    errores.append(
+        CustomError("Sintáctico", "Error Sintáctico: " + str(t[1].value), t.lineno(1), find_column(input, t.slice[1])))
 
 
 # DECLARACION ------------------------
@@ -340,9 +342,11 @@ def p_niveles(t):
     t[1] += 1
     t[0] = t[1]
 
+
 def p_niveles_corte(t):
     """ niveles : nivel """
     t[0] = 1
+
 
 def p_nivel(t):
     """ nivel : CORIZQ CORDER """
@@ -513,18 +517,24 @@ def p_otras_expresiones(t):
                   | array_data
                   | array_instancia
                   | if_instr"""
-    t[0] = t[1]
+
+    if t.slice[1].type == "acceso_objeto_expresion":
+        t[0] = AccesoObjeto(listaExpresiones=t[1])
+    else:
+        t[0] = t[1]
 
 
 # ARRAY DATA --------------------------
 def p_array_data(t):
     """ array_data : CORIZQ lista_expresiones CORDER"""
-    t[0] = ArrayData(listaExpresiones = t[2])
+    t[0] = ArrayData(listaExpresiones=t[2])
+
 
 # ARRAY INSTANCIA ---------------------
 def p_array_instancia(t):
     """ array_instancia : NEW tipo_dato dimensiones"""
-    t[0] = ArrayInstancia(tipo = t[2], dimensiones = t[3])
+    t[0] = ArrayInstancia(tipo=t[2], dimensiones=t[3])
+
 
 def p_dimensiones(t):
     """ dimensiones : dimensiones dimension"""
@@ -536,9 +546,11 @@ def p_dimensiones_corte(t):
     """ dimensiones : dimension"""
     t[0] = [t[1]]
 
+
 def p_dimension(t):
     """ dimension : CORIZQ expresion CORDER"""
     t[0] = t[2]
+
 
 # INSTANCIA OBJETO -------------------------
 def p_instancia_objeto(t):
@@ -550,31 +562,23 @@ def p_instancia_objeto(t):
         t[0] = InstanciaObjeto(idClase=t[2], listaExpresiones=t[4])
 
 
-
 # ACCESO A OBJETO  ----------------------
-def p_acceso_objeto_expresion(t):
-    """ acceso_objeto_expresion : acceso_objeto"""
-    t[0] = AccesoObjeto(listaExpresiones=t[1])
-
 
 def p_acceso_objeto(t):
-    """ acceso_objeto : acceso_objeto  PUNTO expresion"""
+    """ acceso_objeto_expresion : acceso_objeto_expresion  PUNTO expresion"""
     t[1].append(t[3])
     t[0] = t[1]
 
 
 def p_acceso_objeto_cort(t):
-    """ acceso_objeto : expresion"""
+    """ acceso_objeto_expresion : expresion"""
     t[0] = [t[1]]
+
 
 # ACCESO ARRAY ----------------------------
 def p_acceso_array(t):
     """acceso_array_expresion : ID dimensiones"""
-    t[0] = AccesoArreglo( idArreglo = t[1] ,listaExpresiones = t[2])
-
-
-
-
+    t[0] = AccesoArreglo(idArreglo=t[1], listaExpresiones=t[2])
 
 
 # ------------------------------------------ TIPOS DE RETORNO
@@ -618,23 +622,22 @@ def p_error(t):
     print(f"SE ENCONTRO UN ERROR {t.value}")
 
 
-
 # Definicion del parser
 
 parser = yacc.yacc()
 
 
-
-
 def getErrores():
     return errores
 
+
 input = ''
+
+
 def parse(inp):
     global lexer
     global input
     global errores
-
 
     errores = []
     input = inp
