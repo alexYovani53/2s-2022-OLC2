@@ -1,0 +1,192 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    DOBLEPT
+
+Grammar
+
+Rule 0     S' -> init
+Rule 1     init -> clases_funciones
+Rule 2     clases_funciones -> clases_funciones clase_funcion
+Rule 3     clases_funciones -> clase_funcion
+Rule 4     clase_funcion -> clase
+Rule 5     clase_funcion -> funcion
+Rule 6     clase_funcion -> error LLAVEDER
+Rule 7     clase -> CLASS ID bloqueClase
+Rule 8     bloqueClase -> LLAVEIZQ instrs_clase LLAVEDER
+Rule 9     bloqueClase -> LLAVEIZQ LLAVEDER
+Rule 10    funcion -> tipo_funcion ID PIZQ PDER bloque
+Rule 11    funcion -> tipo_funcion ID PIZQ lista_parametros PDER bloque
+Rule 12    lista_parametros -> lista_parametros COMA parametro
+Rule 13    lista_parametros -> parametro
+Rule 14    parametro -> tipo_dato ID
+Rule 15    parametro -> MULTIPLICACION tipo_dato ID
+Rule 16    bloque -> LLAVEIZQ LLAVEDER
+Rule 17    bloque -> LLAVEIZQ instrucciones LLAVEDER
+Rule 18    instrs_clase -> instrs_clase instr
+Rule 19    instrs_clase -> instr
+Rule 20    instr -> declaracion PTCOMA
+Rule 21    instrucciones -> instrucciones instruccion
+Rule 22    instrucciones -> instruccion
+Rule 23    instruccion -> print_inst PTCOMA
+Rule 24    instruccion -> declaracion PTCOMA
+Rule 25    instruccion -> declaracion_objeto PTCOMA
+Rule 26    instruccion -> declaracion_arreglo PTCOMA
+Rule 27    instruccion -> llamada PTCOMA
+Rule 28    instruccion -> return_inst PTCOMA
+Rule 29    instruccion -> if_instr
+Rule 30    instruccion -> error PTCOMA
+Rule 31    declaracion -> tipo_dato ID IGUAL expresion
+Rule 32    declaracion -> tipo_dato ID
+Rule 33    declaracion_arreglo -> tipo_dato niveles ID IGUAL expresion
+Rule 34    niveles -> niveles nivel
+Rule 35    niveles -> nivel
+Rule 36    nivel -> CORIZQ CORDER
+Rule 37    declaracion_objeto -> ID ID IGUAL expresion
+Rule 38    print_inst -> PRINT PIZQ expresion PDER
+Rule 39    llamada -> ID PIZQ PDER
+Rule 40    llamada -> ID PIZQ lista_expresiones PDER
+Rule 41    return_inst -> RETURN_W
+Rule 42    return_inst -> RETURN_W expresion
+Rule 43    if_instr -> IF_W PIZQ expresion PDER bloque
+Rule 44    if_instr -> IF_W PIZQ expresion PDER bloque ELSE_W bloque
+Rule 45    if_instr -> IF_W PIZQ expresion PDER bloque listaelseif
+Rule 46    if_instr -> IF_W PIZQ expresion PDER bloque listaelseif ELSE_W bloque
+Rule 47    listaelseif -> listaelseif else_if
+Rule 48    listaelseif -> else_if
+Rule 49    else_if -> ELSE_W IF_W PIZQ expresion PDER bloque
+Rule 50    lista_expresiones -> lista_expresiones COMA expresion
+Rule 51    lista_expresiones -> expresion
+Rule 52    expresion -> expresion OR expresion
+Rule 53    expresion -> expresion AND expresion
+Rule 54    expresion -> NOT expresion
+Rule 55    expresion -> expresion MENOR expresion
+Rule 56    expresion -> expresion MAYOR expresion
+Rule 57    expresion -> expresion MAYORIGUAL expresion
+Rule 58    expresion -> expresion MENORIGUAL expresion
+Rule 59    expresion -> expresion DIFERENTE expresion
+Rule 60    expresion -> expresion IGUALIGUAL expresion
+Rule 61    expresion -> MENOS expresion
+Rule 62    expresion -> expresion MAS expresion
+Rule 63    expresion -> expresion MENOS expresion
+Rule 64    expresion -> expresion MULTIPLICACION expresion
+Rule 65    expresion -> expresion DIVISION expresion
+Rule 66    expresion -> PIZQ expresion PDER
+Rule 67    expresion -> ENTERO
+Rule 68    expresion -> DECIMAL
+Rule 69    expresion -> ID
+Rule 70    expresion -> CADENA
+Rule 71    expresion -> TRUE
+Rule 72    expresion -> FALSE
+Rule 73    expresion -> llamada
+Rule 74    expresion -> acceso_objeto_expresion
+Rule 75    expresion -> acceso_array_expresion
+Rule 76    expresion -> instancia_objeto
+Rule 77    expresion -> array_data
+Rule 78    expresion -> array_instancia
+Rule 79    expresion -> if_instr
+Rule 80    array_data -> CORIZQ lista_expresiones CORDER
+Rule 81    array_instancia -> NEW tipo_dato dimensiones
+Rule 82    dimensiones -> dimensiones dimension
+Rule 83    dimensiones -> dimension
+Rule 84    dimension -> CORIZQ expresion CORDER
+Rule 85    instancia_objeto -> NEW ID PIZQ PDER
+Rule 86    instancia_objeto -> NEW ID PIZQ lista_expresiones PDER
+Rule 87    acceso_objeto_expresion -> acceso_objeto_expresion PUNTO expresion
+Rule 88    acceso_objeto_expresion -> expresiones
+Rule 89    acceso_array_expresion -> ID dimensiones
+Rule 90    tipo_funcion -> INT
+Rule 91    tipo_funcion -> STRING_TYPE
+Rule 92    tipo_funcion -> BOOLEAN
+Rule 93    tipo_funcion -> VOID
+Rule 94    tipo_funcion -> FLOAT
+Rule 95    tipo_dato -> INT
+Rule 96    tipo_dato -> STRING_TYPE
+Rule 97    tipo_dato -> BOOLEAN
+Rule 98    tipo_dato -> FLOAT
+
+Terminals, with rules where they appear
+
+AND                  : 53
+BOOLEAN              : 92 97
+CADENA               : 70
+CLASS                : 7
+COMA                 : 12 50
+CORDER               : 36 80 84
+CORIZQ               : 36 80 84
+DECIMAL              : 68
+DIFERENTE            : 59
+DIVISION             : 65
+DOBLEPT              : 
+ELSE_W               : 44 46 49
+ENTERO               : 67
+FALSE                : 72
+FLOAT                : 94 98
+ID                   : 7 10 11 14 15 31 32 33 37 37 39 40 69 85 86 89
+IF_W                 : 43 44 45 46 49
+IGUAL                : 31 33 37
+IGUALIGUAL           : 60
+INT                  : 90 95
+LLAVEDER             : 6 8 9 16 17
+LLAVEIZQ             : 8 9 16 17
+MAS                  : 62
+MAYOR                : 56
+MAYORIGUAL           : 57
+MENOR                : 55
+MENORIGUAL           : 58
+MENOS                : 61 63
+MULTIPLICACION       : 15 64
+NEW                  : 81 85 86
+NOT                  : 54
+OR                   : 52
+PDER                 : 10 11 38 39 40 43 44 45 46 49 66 85 86
+PIZQ                 : 10 11 38 39 40 43 44 45 46 49 66 85 86
+PRINT                : 38
+PTCOMA               : 20 23 24 25 26 27 28 30
+PUNTO                : 87
+RETURN_W             : 41 42
+STRING_TYPE          : 91 96
+TRUE                 : 71
+VOID                 : 93
+error                : 6 30
+
+Nonterminals, with rules where they appear
+
+acceso_array_expresion : 75
+acceso_objeto_expresion : 74 87
+array_data           : 77
+array_instancia      : 78
+bloque               : 10 11 43 44 44 45 46 46 49
+bloqueClase          : 7
+clase                : 4
+clase_funcion        : 2 3
+clases_funciones     : 1 2
+declaracion          : 20 24
+declaracion_arreglo  : 26
+declaracion_objeto   : 25
+dimension            : 82 83
+dimensiones          : 81 82 89
+else_if              : 47 48
+expresion            : 31 33 37 38 42 43 44 45 46 49 50 51 52 52 53 53 54 55 55 56 56 57 57 58 58 59 59 60 60 61 62 62 63 63 64 64 65 65 66 84 87
+expresiones          : 88
+funcion              : 5
+if_instr             : 29 79
+init                 : 0
+instancia_objeto     : 76
+instr                : 18 19
+instrs_clase         : 8 18
+instruccion          : 21 22
+instrucciones        : 17 21
+lista_expresiones    : 40 50 80 86
+lista_parametros     : 11 12
+listaelseif          : 45 46 47
+llamada              : 27 73
+nivel                : 34 35
+niveles              : 33 34
+parametro            : 12 13
+print_inst           : 23
+return_inst          : 28
+tipo_dato            : 14 15 31 32 33 81
+tipo_funcion         : 10 11
+
