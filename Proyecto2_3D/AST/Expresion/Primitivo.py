@@ -1,7 +1,8 @@
 from enum import Enum
 
 from AST.Abstract.Expression import Expression
-from Entorno.RetornoType import RetornoType
+from Entorno.RetornoType import RetornoType, TIPO_DATO
+from main2 import Generador3DInstancia
 
 
 class Primitivo(Expression):
@@ -11,4 +12,40 @@ class Primitivo(Expression):
         self.tipoDato = tipoDato
 
     def obtener3D(self, entorno) -> RetornoType:
-        pass
+
+        CODIGO_SALIDA = ""
+        retorno = RetornoType()
+
+        if (self.tipoDato == TIPO_DATO.ENTERO or self.tipoDato == TIPO_DATO.DECIMAL):
+
+            temp1 = entorno.generador.obtenerTemporal()
+            CODIGO_SALIDA += f'{temp1} = {self.valor};'
+            retorno.iniciarRetorno(CODIGO_SALIDA,"", temp1, self.tipoDato)
+
+        if ( self.tipoDato == TIPO_DATO.CADENA):
+
+            temp2 = entorno.generador.obtenerTemporal()
+            CODIGO_SALIDA += f'{temp2} = HP;\n'
+
+            for caracter in self.valor:
+                valor = ord(caracter)
+                CODIGO_SALIDA += f'Heap[HP] ={valor};\n'
+                CODIGO_SALIDA += f'HP = HP + 1;\n'
+
+            CODIGO_SALIDA += f'Heap[HP] = 0;\n'
+            CODIGO_SALIDA += f'HP = HP+1;\n'
+
+            retorno.iniciarRetorno(CODIGO_SALIDA, "", temp2, self.tipoDato)
+
+        if (self.tipoDato == TIPO_DATO.BOOLEAN):
+            temp2 = entorno.generador.obtenerTemporal()
+            
+            if self.valor == True:
+                CODIGO_SALIDA += f'{temp2} = 1;'
+            else:
+                CODIGO_SALIDA += f'{temp2} = 0;'
+
+            retorno.iniciarRetorno(CODIGO_SALIDA, "", temp2, self.tipoDato)
+
+
+        return retorno

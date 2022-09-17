@@ -16,7 +16,15 @@ class TIPO_DATO(IntEnum):
 class RetornoType:
 
     def __init__(self, tipo=TIPO_DATO.NULL):
-        self.codico = ""
+        self.codigo = ""
         self.etiqueta = ""
         self.temporal = ""
+        self.tipo = tipo
+        self.etiquetaV = ""
+        self.etiquetaF = ""
+
+    def iniciarRetorno(self, codigo, etiqueta, temporal, tipo):
+        self.codigo = codigo
+        self.temporal = temporal
+        self.etiqueta = etiqueta
         self.tipo = tipo
