@@ -6,6 +6,7 @@ class Generador3D:
         self.temporales = 0
         self.etiquetas = 0
         self.codigo = ""
+        self.main = ""
 
 
     def obtenerTemporal(self):
@@ -18,27 +19,47 @@ class Generador3D:
 
         et = "L"+self.etiquetas.__str__()
         self.etiquetas += 1
-        return self.et
+        return et
 
     def generarEncabezado(self):
-        encabezado = ""
-        encabezado += """ 
+        encabezado = """ 
+#include <stdio.h>
+float Stack[10000];
+float Heap[10000];
+int SP = 0;
+int HP = 0;
 
-            #include <stdio.h>
-            float Stack[10000];
-            float Heap[10000];
-            
-            int SP = 0;
-            int HP = 0;
- 
-        """
+"""
+        if self.temporales > 0:
+            encabezado += "float "
+        for i in range(0, self.temporales):
+            if i % 15 == 0 and i > 0:
+                encabezado += "\n"
+            encabezado += f"t{i}"
+            if i < self.temporales - 1:
+                encabezado += ","
+
+        if self.temporales > 0:
+            encabezado += "; \n\n"
+
+        return encabezado
+
+    def agregarInstruccion(self,codigo):
+        self.main += codigo + '\n'
 
     def generarMain(self):
-        pass
+        codigo = self.generarEncabezado()
+        codigo += self.codigo +'\n'
+        codigo += "int main(){ \n" \
+                  f"{self.main} \n" \
+                  f"return 0;" \
+                  "\n}"
+        return codigo
 
     def reiniciarGenerador(self):
         self.temporales = 0
         self.etiquetas = 0
         self.codigo = ""
+        self.main = ""
 
 
