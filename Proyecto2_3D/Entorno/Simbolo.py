@@ -10,6 +10,7 @@ class Simbolo:
         self.valor = None
         self.tipo = TIPO_DATO.NULL
         self.constante = False
+        self.direccionRelativa = 0
 
         self.parametros = []
         self.instrucciones = []
@@ -28,11 +29,12 @@ class Simbolo:
         self.entornoReferencia = None
         self.valorReferencia = None
 
-    def iniciarSimboloPrimitivo(self, identificador, valor, tipo, constante=False):
+    def iniciarSimboloPrimitivo(self, identificador, valor, tipo, direccionRelativa, constante=False):
         self.identificador = identificador
         self.valor = valor
         self.tipo = tipo
         self.constante = constante
+        self.direccionRelativa = direccionRelativa
 
     def iniciarSimboloFuncion(self, identificador,listaParametros,listaInstrucciones, tipo, ):
         self.identificador = identificador

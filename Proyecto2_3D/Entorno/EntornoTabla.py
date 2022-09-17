@@ -5,12 +5,13 @@ from Entorno.Simbolos.Funcion import Funcion
 
 class EntornoTabla:
 
-    def __init__(self, consola, padre = None):
+    def __init__(self, generador,padre = None):
         self.padre = padre
         self.tabla = {}
         self.tablaFunciones = {}
         self.tablaClases = {}
-        self.consola = consola
+        self.generador = generador
+        self.tamanio = 0
 
     def existeSimbolo(self,identificador):
         entorno = self
