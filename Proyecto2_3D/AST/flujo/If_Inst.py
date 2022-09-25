@@ -34,10 +34,10 @@ class IfInst(Instruccion):
         if len(self.listaelseif) > 0:
 
             for intrsElseIf in self.listaelseif:
-                intrsElseIf.etiquetaVerdadera = entorno.generador.obtenerEtiqueta()
-                intrsElseIf.etiquetaFalsa = entorno.generador.obtenerEtiqueta()
+                intrsElseIf.condicion.etiquetaVerdadera = entorno.generador.obtenerEtiqueta()
+                intrsElseIf.condicion.etiquetaFalsa = entorno.generador.obtenerEtiqueta()
 
-                expresionSubCondion = intrsElseIf.obtener3D(entorno)
+                expresionSubCondion = intrsElseIf.condicion.obtener3D(entorno)
 
 
         # bool a =    10 > 20;
