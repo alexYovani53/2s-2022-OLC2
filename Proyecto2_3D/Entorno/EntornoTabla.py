@@ -72,6 +72,17 @@ class EntornoTabla:
 
         return False
 
+
+    def sustituirFuncion (self,funcion):
+        entorno = self
+        while entorno is not None:
+            existe = entorno.tablaFunciones.get(funcion.identificador)
+            if existe is not None:
+                entorno.tablaFunciones[funcion.identificador] = funcion
+                return
+            else:
+                entorno = entorno.padre
+
     def obtenerFuncion(self,identificador) -> Funcion:
         entorno = self
         while entorno is not None:

@@ -7,9 +7,12 @@ class Identificador(Expression):
     def __init__(self, identificador):
         self.nombre = identificador
 
+        self.etiquetaVerdadera = ""
+        self.etiquetaFalsa = ""
+
     def obtener3D(self, entorno):
 
-
+        retorno = RetornoType()
         CODIGO_SALIDA = ""
 
         if entorno.existeSimbolo(self.nombre):
@@ -22,8 +25,16 @@ class Identificador(Expression):
             CODIGO_SALIDA += f'{TEMP1} = SP + {simbolo.direccionRelativa};\n'
             CODIGO_SALIDA += f'{TEMP2} = Stack[(int) {TEMP1}];\n'
 
-            retorno =  RetornoType()
+
+            if simbolo.tipo is TIPO_DATO.BOOLEAN and self.etiquetaVerdadera != "":
+                CODIGO_SALIDA += f"if ( {TEMP2} == 1 ) goto {self.etiquetaVerdadera};\n"
+                CODIGO_SALIDA += f"goto {self.etiquetaFalsa}; \n"
+                retorno.etiquetaV = self.etiquetaVerdadera
+                retorno.etiquetaF = self.etiquetaFalsa
+
+
             retorno.iniciarRetorno(CODIGO_SALIDA,"",TEMP2,simbolo.tipo)
+
             return retorno
         else:
             return RetornoType()

@@ -11,6 +11,9 @@ class Primitivo(Expression):
         self.valor = valor
         self.tipoDato = tipoDato
 
+        self.etiquetaVerdadera = ""
+        self.etiquetaFalsa = ""
+
     def obtener3D(self, entorno) -> RetornoType:
 
         CODIGO_SALIDA = ""
@@ -38,12 +41,21 @@ class Primitivo(Expression):
             retorno.iniciarRetorno(CODIGO_SALIDA, "", temp2, self.tipoDato)
 
         if (self.tipoDato == TIPO_DATO.BOOLEAN):
+
             temp2 = entorno.generador.obtenerTemporal()
-            
-            if self.valor == True:
-                CODIGO_SALIDA += f'{temp2} = 1;'
+            if self.etiquetaVerdadera != "" and self.valor == True:
+                CODIGO_SALIDA += f"goto {self.etiquetaVerdadera};\n"
+                retorno.etiquetaV = self.etiquetaVerdadera
+                retorno.etiquetaF = self.etiquetaFalsa
+            elif self.etiquetaFalsa != "" and self.valor == False:
+                CODIGO_SALIDA += f"goto {self.etiquetaFalsa};\n"
+                retorno.etiquetaV = self.etiquetaVerdadera
+                retorno.etiquetaF = self.etiquetaFalsa
             else:
-                CODIGO_SALIDA += f'{temp2} = 0;'
+                if self.valor == True:
+                    CODIGO_SALIDA += f'{temp2} = 1;'
+                else:
+                    CODIGO_SALIDA += f'{temp2} = 0;'
 
             retorno.iniciarRetorno(CODIGO_SALIDA, "", temp2, self.tipoDato)
 

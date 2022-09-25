@@ -63,8 +63,10 @@ class Operacion(Expression):
                 return self.operacionRelacional(entorno)
             case TIPO_OPERACION.IGUALIGUAL:
                 return self.operacionRelacional(entorno)
-
-
+            case TIPO_OPERACION.AND:
+                return self.operacionLogicaAnd(entorno)
+            case TIPO_OPERACION.OR:
+                return self.operacionLogicaOr(entorno)
 
     def operacionSuma(self,entorno):
 
@@ -109,6 +111,9 @@ class Operacion(Expression):
 
         return  RETORNO
 
+
+
+
     def operacionRelacional(self,entorno):
         # if a< b goto B.true
         # goto B.false
@@ -137,8 +142,73 @@ class Operacion(Expression):
             return RetornoType()
 
 
+    def operacionLogicaAnd(self,entorno):
+
+        # B -> B1 && B2  |  B1.true = B.nuevaetiqueta()
+        #                |  B1.false = false
+        #                |  B2.true = B.true
+        #                |  B2.false = B.false
+        #                |  B.codigo = B1.codigo +  etiqueta(B1.true) + B2.codigo
+
+        retorno = RetornoType()
+
+        self.exprIzq.etiquetaVerdadera = entorno.generador.obtenerEtiqueta()
+        self.exprIzq.etiquetaFalsa = self.etiquetaFalsa
+
+        self.exprDer.etiquetaVerdadera = self.etiquetaVerdadera
+        self.exprDer.etiquetaFalsa = self.etiquetaFalsa
+
+        izquResultado = self.exprIzq.obtener3D(entorno)
+        derResultado = self.exprDer.obtener3D(entorno)
+
+        retorno.codigo += izquResultado.codigo
+        retorno.codigo += f"{izquResultado.etiquetaV}: \n"
+        retorno.codigo += derResultado.codigo
+
+        retorno.etiquetaV = self.etiquetaVerdadera
+        retorno.etiquetaF = self.etiquetaFalsa
+        retorno.tipo = TIPO_DATO.BOOLEAN
+
+        return retorno
+
+    def operacionLogicaOr(self, entorno):
+
+        # B -> B1 || B2  |  B1.true = B.true
+        #                |  B1.false = nuevaetiqueta()
+        #                |  B2.true = B.true
+        #                |  B2.false = B.false
+        #                |  B.codigo = B1.codigo +  etiqueta(B1.false) + B2.codigo
+
+        retorno = RetornoType()
+
+        if isinstance(self.exprIzq, Operacion) is False:
+            return RetornoType()
+        if isinstance(self.exprDer, Operacion) is False:
+            return RetornoType()
+
+        self.exprIzq.etiquetaVerdadera = self.etiquetaVerdadera
+        self.exprIzq.etiquetaFalsa = entorno.generador.obtenerEtiqueta()
+
+        self.exprDer.etiquetaVerdadera = self.etiquetaVerdadera
+        self.exprDer.etiquetaFalsa = self.etiquetaFalsa
+
+
+        izquResultado = self.exprIzq.obtener3D(entorno)
+        derResultado = self.exprDer.obtener3D(entorno)
+
+        retorno.codigo += izquResultado.codigo
+        retorno.codigo += f"{izquResultado.etiquetaF}: \n"
+        retorno.codigo += derResultado.codigo
+
+        retorno.etiquetaV = self.etiquetaVerdadera
+        retorno.etiquetaF = self.etiquetaFalsa
+        retorno.tipo = TIPO_DATO.BOOLEAN
+
+        return retorno
+
+
     def obtenerSimbolo(self):
-        match(self.tipo_operacion):
+        match self.tipo_operacion:
             case TIPO_OPERACION.MAYOR:
                 return '>'
             case TIPO_OPERACION.MENOR:
@@ -147,7 +217,15 @@ class Operacion(Expression):
                 return '>='
             case TIPO_OPERACION.MENORIGUAL:
                 return '<='
+            case TIPO_OPERACION.AND:
+                return '&&'
+            case TIPO_OPERACION.OR:
+                return '||'
+            case TIPO_OPERACION.DIFERENTE:
+                return '!='
 
+            case TIPO_OPERACION.IGUALIGUAL:
+                return '=='
     def operacionConcatenar(self,entorno,expresionRetorno):
         CODIGO_SALIDA = ""
 
