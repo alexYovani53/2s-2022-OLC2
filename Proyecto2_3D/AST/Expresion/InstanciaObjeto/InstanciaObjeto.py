@@ -15,4 +15,42 @@ class InstanciaObjeto(Expression):
 
 
     def obtener3D(self, entorno):
-        pass
+
+        if entorno.existeClase(self.idClase) is False: return RetornoType()
+
+        CODIGO_SALIDA = ""
+        clasePlantilla : Clase  = entorno.obtenerClase(self.idClase)
+
+        temp1 = entorno.generador.obtenerTemporal()
+
+        CODIGO_SALIDA += f"/*Declaración de instancia de objeto*/\n"
+        CODIGO_SALIDA += f"{temp1} = HP; \n"
+        CODIGO_SALIDA += f" HP = HP + {self.tamanioDeClase(clasePlantilla)}; \n"
+
+
+        ENTORNO_INSTANCIA = EntornoTabla(entorno.generador, None)
+
+        index = 0
+        for declaracion in clasePlantilla.instrucciones:
+
+            resultadoExpr = self.listaExpresiones[index].obtener3D(entorno)
+            declaracion.declarar_en_instancia = "true"
+            declaracion.puntero_entorno_nuevo = temp1
+            declaracion.expresionCompilada = resultadoExpr
+            CODIGO_SALIDA += declaracion.ejecutar3D(ENTORNO_INSTANCIA)
+
+            index += 1
+
+        instanciaNueva = Instancia(self.idClase,"",ENTORNO_INSTANCIA)
+
+        retorno = RetornoType()
+        retorno.iniciarRetornoInstancia(CODIGO_SALIDA, temp1, TIPO_DATO.OBJETO, instanciaNueva)
+        return retorno
+
+    def tamanioDeClase(self, clasePlantilla: Clase):
+
+        contador = 0
+        for instruccion in clasePlantilla.instrucciones:
+            if isinstance(instruccion, Declaracion):
+                contador += 1
+        return contador

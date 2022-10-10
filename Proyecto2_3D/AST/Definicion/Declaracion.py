@@ -20,6 +20,9 @@ class Declaracion(Instruccion):
         self.puntero_entorno_nuevo = ""
         self.ejecuta_en_funcion = False
 
+        # declaración en HEAP
+        self.declarar_en_instancia = False
+
     def ejecutar3D(self, entorno):
 
         CODIGO_SALIDA = ""
@@ -35,6 +38,10 @@ class Declaracion(Instruccion):
 
         if self.ejecuta_en_funcion:
             PUNTERO_ENTORNO = self.puntero_entorno_nuevo
+
+        if self.declarar_en_instancia:
+            PUNTERO_ENTORNO = self.puntero_entorno_nuevo
+            SEGMENTO_MEMORIA = "Heap"
 
         tamanioEntorno = entorno.tamanio
         temp1 = entorno.generador.obtenerTemporal()
