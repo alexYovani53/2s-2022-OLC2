@@ -48,7 +48,7 @@ class Print(Instruccion):
             CODIGO_SALIDA += f'{caracter} = Heap[(int){temp1}];\n'
             CODIGO_SALIDA += f'printf(\"%d\", (int){caracter}); \n'
             CODIGO_SALIDA += f'     {temp1} = {temp1} + 1;\n'
-            CODIGO_SALIDA += f'got {etqCiclo}; '
+            CODIGO_SALIDA += f'goto {etqCiclo}; '
 
             CODIGO_SALIDA += f'{etqAuxiliar}: \n'
             CODIGO_SALIDA += f'if({caracter} == 0) goto {etqSalida};\n' \
