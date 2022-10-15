@@ -32,7 +32,7 @@ class Primitivo(Expression):
 
             for caracter in self.valor:
                 valor = ord(caracter)
-                CODIGO_SALIDA += f'Heap[HP] ={valor};\n'
+                CODIGO_SALIDA += f'Heap[HP] ={valor}; /*{caracter}*/\n'
                 CODIGO_SALIDA += f'HP = HP + 1;\n'
 
             CODIGO_SALIDA += f'Heap[HP] = 0;\n'

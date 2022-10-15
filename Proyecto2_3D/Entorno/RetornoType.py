@@ -35,3 +35,10 @@ class RetornoType:
         self.temporal = temporal
         self.tipo = tipo
         self.valor = OBJETO
+
+
+    def iniciarRetornoArreglo(self, codigo, temporal, tipo, ARREGLO):
+        self.codigo = codigo
+        self.temporal = temporal
+        self.tipo = tipo
+        self.valor = ARREGLO
