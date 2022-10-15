@@ -55,7 +55,7 @@ class Funcion(Simbolo, Instruccion):
         for instruccion in self.instrucciones:
             CODIGO_SALIDA += instruccion.ejecutar3D(entorno)
 
-        CODIGO_SALIDA.replace("SECCION_N_RETORNO", ETIQUETA_RETURN)
+        CODIGO_SALIDA = CODIGO_SALIDA.replace("SECCION_N_RETORNO", ETIQUETA_RETURN)
 
         CODIGO_SALIDA += f"{ETIQUETA_RETURN}: \n"
         CODIGO_SALIDA += f"return; \n"

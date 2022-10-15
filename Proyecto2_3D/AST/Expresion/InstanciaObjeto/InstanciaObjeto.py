@@ -1,4 +1,5 @@
 from AST.Abstract.Expression import Expression
+from AST.Definicion.Arreglo.CrearArreglo import CrearArreglo
 from AST.Definicion.Declaracion import Declaracion
 from Entorno.EntornoTabla import EntornoTabla
 from Entorno.RetornoType import RetornoType, TIPO_DATO
@@ -33,11 +34,16 @@ class InstanciaObjeto(Expression):
         index = 0
         for declaracion in clasePlantilla.instrucciones:
 
-            resultadoExpr = self.listaExpresiones[index].obtener3D(entorno)
-            declaracion.declarar_en_instancia = "true"
-            declaracion.puntero_entorno_nuevo = temp1
-            declaracion.expresionCompilada = resultadoExpr
-            CODIGO_SALIDA += declaracion.ejecutar3D(ENTORNO_INSTANCIA)
+            if isinstance(declaracion, Declaracion):
+
+                resultadoExpr = self.listaExpresiones[index].obtener3D(entorno)
+                declaracion.declarar_en_instancia = "true"
+                declaracion.puntero_entorno_nuevo = temp1
+                declaracion.expresionCompilada = resultadoExpr
+                CODIGO_SALIDA += declaracion.ejecutar3D(ENTORNO_INSTANCIA)
+            elif isinstance(declaracion, CrearArreglo):
+                declaracion.declarar_en_instancia = "true"
+                pass
 
             index += 1
 
