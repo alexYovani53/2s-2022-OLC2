@@ -10,6 +10,8 @@ class Identificador(Expression):
         self.etiquetaVerdadera = ""
         self.etiquetaFalsa = ""
 
+        self.referencia = False
+
     def obtener3D(self, entorno):
 
         retorno = RetornoType()
@@ -23,7 +25,11 @@ class Identificador(Expression):
 
             CODIGO_SALIDA += f"/* ACCEDIENDO A VARIABLE  {self.nombre}*/\n"
             CODIGO_SALIDA += f'{TEMP1} = SP + {simbolo.direccionRelativa};\n'
-            CODIGO_SALIDA += f'{TEMP2} = Stack[(int) {TEMP1}];\n'
+
+            if (self.referencia):
+                TEMP2 = TEMP1
+            else:
+                CODIGO_SALIDA += f'{TEMP2} = Stack[(int) {TEMP1}];\n'
 
 
             if simbolo.tipo is TIPO_DATO.BOOLEAN and self.etiquetaVerdadera != "":
