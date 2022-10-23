@@ -26,8 +26,9 @@ class Simbolo:
 
 
         # referencia
-        self.entornoReferencia = None
-        self.valorReferencia = None
+        self.referencia = False
+        self.entornoReferencia = "Stack"
+        self.puntero = "t1"
 
     def iniciarSimboloPrimitivo(self, identificador, valor, tipo, direccionRelativa, constante=False):
         self.identificador = identificador
