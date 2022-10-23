@@ -1,5 +1,6 @@
 from AST.Abstract.Instruccion import Instruccion
 from AST.Definicion.Declaracion import Declaracion
+from AST.Expresion.Identificador import Identificador
 from Entorno.RetornoType import RetornoType, TIPO_DATO
 from Entorno.Simbolo import Simbolo
 
@@ -33,6 +34,13 @@ class Funcion(Simbolo, Instruccion):
             expresion_tomada = expresiones[i]
 
             if isinstance(declaracion_tomada, Declaracion):
+
+                if declaracion_tomada.esReferencia is True:
+                    if isinstance( expresion_tomada, Identificador) is False:
+                        return ""
+
+                    expresion_tomada.retornarReferencia = True
+
                 declaracion_tomada.expresionCompilada = expresion_tomada.obtener3D(entornoQueLlamo)
                 declaracion_tomada.puntero_entorno_nuevo = puntero_entorno_nuevo
                 declaracion_tomada.ejecuta_en_funcion = True
