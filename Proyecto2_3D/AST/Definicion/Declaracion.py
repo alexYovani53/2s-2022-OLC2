@@ -54,6 +54,9 @@ class Declaracion(Instruccion):
         simbolo = Simbolo()
         simbolo.iniciarSimboloPrimitivo(self.identificador.nombre, None, self.tipo, tamanioEntorno)
 
+        if self.esReferencia is True:
+            simbolo.referencia = True
+
         entorno.agregarSimbolo(simbolo)
         entorno.tamanio += 1
 

@@ -58,8 +58,9 @@ class Llamada(Instruccion, Expression):
         if funcion.ya_se_gero:
             return
 
-        resultadoFuncion = funcion.ejecutar3D(entorno)
-        entorno.generador.agregarFuncion(resultadoFuncion)
 
         funcion.ya_se_gero = True
         entorno.sustituirFuncion(funcion)
+
+        resultadoFuncion = funcion.ejecutar3D(entorno)
+        entorno.generador.agregarFuncion(resultadoFuncion)
